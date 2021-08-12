@@ -33,6 +33,7 @@
             <th scope="col"><spring:message code="numberOfStudents"/></th>
             <sec:authorize access="hasRole('ADMIN')">
                 <th scope="col"></th>
+                <th scope="col"></th>
             </sec:authorize>
         </tr>
         </thead>
@@ -45,6 +46,8 @@
                 <td>${course.duration}</td>
                 <td>${course.numberOfStudents}</td>
                 <sec:authorize access="hasRole('ADMIN')">
+                    <td><a href="${pageContext.request.contextPath}/edit_course/${course.id}"
+                           class="btn btn-info mt-4"><spring:message code="edit"/></a></td>
                     <td><a href="${pageContext.request.contextPath}/delete_course/${course.id}"
                            class="btn btn-danger mt-4"><spring:message code="delete"/></a></td>
                 </sec:authorize>

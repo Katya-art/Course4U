@@ -89,4 +89,28 @@ public class AdminController {
         courseService.deleteCourseById(id);
         return "redirect:/welcome";
     }
+
+    @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.GET)
+    public String editCourse(@PathVariable("id")Long id, Model model) {
+        Course course = courseService.findCourseById(id);
+        course.setTeacherName(course.getTeacher().getFullName());
+        model.addAttribute("editForm", course);
+        model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
+        return "edit_course";
+    }
+
+    @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.POST)
+    public String editCourse(@ModelAttribute("courseForm") Course courseForm, BindingResult bindingResult, Model model) {
+        courseValidator.validate(courseForm, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            //???
+            model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
+            return "add_course";
+        }
+        courseForm.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
+        courseService.save(courseForm);
+
+        return "redirect:/welcome";
+    }
 }

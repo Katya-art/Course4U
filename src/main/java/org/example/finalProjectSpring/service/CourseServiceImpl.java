@@ -28,4 +28,9 @@ public class CourseServiceImpl implements CourseService {
     public void deleteCourseById(Long id) {
         courseDao.deleteById(id);
     }
+
+    @Override
+    public Course findCourseById(Long id) {
+        return courseDao.findCourseById(id);
+    }
 }
