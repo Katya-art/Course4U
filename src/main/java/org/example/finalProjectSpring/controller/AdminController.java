@@ -4,7 +4,6 @@ import org.example.finalProjectSpring.dao.RoleDao;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.User;
 import org.example.finalProjectSpring.service.CourseService;
-import org.example.finalProjectSpring.service.SecurityService;
 import org.example.finalProjectSpring.service.UserService;
 import org.example.finalProjectSpring.validator.CourseValidator;
 import org.example.finalProjectSpring.validator.UserValidator;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -81,6 +81,12 @@ public class AdminController {
         courseForm.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
         courseService.save(courseForm);
 
+        return "redirect:/welcome";
+    }
+
+    @RequestMapping(value ="/delete_course/{id}", method = RequestMethod.GET)
+    public String deleteCourse(@PathVariable("id") Long id) {
+        courseService.deleteCourseById(id);
         return "redirect:/welcome";
     }
 }

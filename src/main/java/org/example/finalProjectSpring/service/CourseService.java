@@ -12,4 +12,6 @@ import org.example.finalProjectSpring.model.Course;
 public interface CourseService {
 
     void save(Course course);
+
+    void deleteCourseById(Long id);
 }

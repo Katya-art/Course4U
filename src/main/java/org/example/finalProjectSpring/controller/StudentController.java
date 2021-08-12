@@ -1,6 +1,8 @@
 package org.example.finalProjectSpring.controller;
 
+import org.example.finalProjectSpring.dao.CourseDao;
 import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.service.CourseService;
 import org.example.finalProjectSpring.service.SecurityService;
 import org.example.finalProjectSpring.service.UserService;
 import org.example.finalProjectSpring.validator.UserValidator;
@@ -27,6 +29,9 @@ public class StudentController {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private CourseDao courseDao;
 
     @Autowired
     private UserValidator userValidator;
@@ -68,6 +73,7 @@ public class StudentController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
+        model.addAttribute("coursesList", courseDao.findAll());
         return "welcome";
     }
 }

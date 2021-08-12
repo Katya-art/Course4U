@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -22,20 +23,41 @@
 <jsp:include page="elements/navbar.jsp"/>
 <div class="container">
 
-    <c:if test="${pageContext.request.userPrincipal.name != null}">
-        <form id="logoutForm" method="POST" action="${contextPath}/logout">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        </form>
-
-        <h2>Welcome ${pageContext.request.userPrincipal.name}</h2>
-
-    </c:if>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col"><spring:message code="courseName"/></th>
+            <th scope="col"><spring:message code="teacherName"/></th>
+            <th scope="col"><spring:message code="theme"/></th>
+            <th scope="col"><spring:message code="duration"/></th>
+            <th scope="col"><spring:message code="numberOfStudents"/></th>
+            <sec:authorize access="hasRole('ADMIN')">
+                <th scope="col"></th>
+            </sec:authorize>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${coursesList}" var="course">
+            <tr>
+                <td>${course.name}</td>
+                <td>${course.teacher.fullName}</td>
+                <td>${course.theme}</td>
+                <td>${course.duration}</td>
+                <td>${course.numberOfStudents}</td>
+                <sec:authorize access="hasRole('ADMIN')">
+                    <td><a href="${pageContext.request.contextPath}/delete_course/${course.id}"
+                           class="btn btn-danger mt-4"><spring:message code="delete"/></a></td>
+                </sec:authorize>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 
     <span style="float: right">
     <a href="?lang=en">en</a>
     |
     <a href="?lang=ua">ua</a>
-    </span>
+</span>
 
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

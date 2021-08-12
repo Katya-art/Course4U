@@ -23,4 +23,9 @@ public class CourseServiceImpl implements CourseService {
         course.setNumberOfStudents(0L);
         courseDao.save(course);
     }
+
+    @Override
+    public void deleteCourseById(Long id) {
+        courseDao.deleteById(id);
+    }
 }
