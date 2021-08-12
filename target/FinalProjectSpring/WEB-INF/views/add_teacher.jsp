@@ -30,6 +30,7 @@
 <div class="container">
 
     <form:form method="POST" modelAttribute="teacherForm" class="form-signin">
+        <h2 class="form-signin-heading"><spring:message code="addTeacher"/></h2>
         <spring:bind path="fullName">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <spring:message code="fullName" var="fullName" />

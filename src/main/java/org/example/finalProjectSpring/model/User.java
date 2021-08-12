@@ -38,6 +38,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Role role;
 
+    //only for users with role ROLE_TEACHER
+    @OneToMany(mappedBy = "teacher")
+    private Set<Course> courses;
+
     public Long getId() {
         return id;
     }

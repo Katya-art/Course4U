@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS roles (
 )
     ENGINE = InnoDB;
 
--- Table for mapping user and roles: user_roles
+-- Table for mapping user and role: user_roles
 CREATE TABLE IF NOT EXISTS user_roles (
                             user_id INT NOT NULL,
                             role_id INT NOT NULL,
@@ -24,6 +24,28 @@ CREATE TABLE IF NOT EXISTS user_roles (
                             FOREIGN KEY (role_id) REFERENCES roles (id),
 
                             UNIQUE (user_id, role_id)
+)
+    ENGINE = InnoDB;
+
+-- Table: courses
+CREATE TABLE IF NOT EXISTS courses (
+                                     id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                     name VARCHAR(255) NOT NULL,
+                                     theme VARCHAR(255) NOT NULL,
+                                     duration VARCHAR(255) NOT NULL,
+                                     number_of_students INT NOT NULL
+)
+    ENGINE = InnoDB;
+
+-- Table for mapping course and teacher: course_teacher
+CREATE TABLE IF NOT EXISTS course_teacher (
+                                          course_id INT NOT NULL,
+                                          teacher_id INT NOT NULL,
+
+                                          FOREIGN KEY (course_id) REFERENCES courses (id),
+                                          FOREIGN KEY (teacher_id) REFERENCES users (id),
+
+                                          UNIQUE (course_id, teacher_id)
 )
     ENGINE = InnoDB;
 

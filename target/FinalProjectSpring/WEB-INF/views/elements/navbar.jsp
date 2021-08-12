@@ -9,6 +9,8 @@
                 <sec:authorize access="hasRole('ADMIN')">
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/add_teacher">
                         <spring:message code="addTeacher"/></a>
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}/add_course">
+                        <spring:message code="addCourse"/></a>
                 </sec:authorize>
             </ul>
         </div>

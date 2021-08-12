@@ -9,6 +9,7 @@
 
     <http auto-config="true">
         <intercept-url pattern="/add_teacher" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/add_course" access="hasRole('ROLE_ADMIN')"/>
 
         <form-login login-page="/login" default-target-url="/welcome" authentication-failure-url="/login?error"
                     username-parameter="username" password-parameter="password"/>

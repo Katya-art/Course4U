@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * Controller for {@link org.example.finalProjectSpring.model.User}'s pages.
+ * Controller for student's pages.
  *
  * @author Kateryna Kravchenko
  * @version 1.0
  */
 
 @Controller
-public class UserController {
+public class StudentController {
 
     @Autowired
     private UserService userService;
@@ -69,25 +69,5 @@ public class UserController {
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
         return "welcome";
-    }
-
-    @RequestMapping(value = "/add_teacher", method = RequestMethod.GET)
-    public String addTeacher(Model model) {
-        model.addAttribute("teacherForm", new User());
-
-        return "add_teacher";
-    }
-
-    @RequestMapping(value = "/add_teacher", method = RequestMethod.POST)
-    public String addTeacher(@ModelAttribute("teacherForm") User teacherForm, BindingResult bindingResult) {
-        userValidator.validate(teacherForm, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "add_teacher";
-        }
-
-        userService.save(teacherForm, 3L);
-
-        return "redirect:/welcome";
     }
 }

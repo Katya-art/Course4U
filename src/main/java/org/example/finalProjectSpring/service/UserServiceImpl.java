@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,4 +47,16 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
         return userDao.findByEmail(email);
     }
+
+    @Override
+    public List<User> findAllByRole(Role role) {
+        return userDao.findAllByRole(role);
+    }
+
+    @Override
+    public User findUserByFullName(String fullName) {
+        return userDao.findUserByFullName(fullName);
+    }
+
+
 }

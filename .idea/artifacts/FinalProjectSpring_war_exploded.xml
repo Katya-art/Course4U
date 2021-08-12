@@ -63,6 +63,17 @@
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.2.5" />
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-taglibs:5.4.6" />
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-acl:5.4.6" />
+          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:3.0-alpha-1" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jasper:9.0.12" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-servlet-api:9.0.12" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-juli:9.0.12" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jsp-api:9.0.12" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-el-api:9.0.12" />
+          <element id="library" level="project" name="Maven: org.eclipse.jdt:ecj:3.13.102" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jasper-el:9.0.12" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-api:9.0.12" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-util-scan:9.0.12" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-util:9.0.12" />
         </element>
       </element>
       <element id="directory" name="META-INF">

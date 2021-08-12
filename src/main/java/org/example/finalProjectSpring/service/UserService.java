@@ -1,6 +1,9 @@
 package org.example.finalProjectSpring.service;
 
+import org.example.finalProjectSpring.model.Role;
 import org.example.finalProjectSpring.model.User;
+
+import java.util.List;
 
 /**
  * Service class for {@link org.example.finalProjectSpring.model.User}
@@ -16,4 +19,8 @@ public interface UserService {
     User findByUsername(String username);
 
     User findByEmail(String email);
+
+    List<User> findAllByRole(Role role);
+
+    User findUserByFullName(String fullName);
 }
