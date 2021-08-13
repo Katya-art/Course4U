@@ -1,6 +1,7 @@
 package org.example.finalProjectSpring.controller;
 
 import org.example.finalProjectSpring.dao.CourseDao;
+import org.example.finalProjectSpring.dao.StatusDao;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.User;
 import org.example.finalProjectSpring.service.CourseService;
@@ -8,6 +9,7 @@ import org.example.finalProjectSpring.service.SecurityService;
 import org.example.finalProjectSpring.service.UserService;
 import org.example.finalProjectSpring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -41,6 +45,9 @@ public class StudentController {
 
     @Autowired
     private CourseDao courseDao;
+
+    @Autowired
+    private StatusDao statusDao;
 
     @Autowired
     private UserValidator userValidator;
@@ -101,5 +108,36 @@ public class StudentController {
         course.setStudents(students);
         courseService.save(course);
         return "redirect:/welcome";
+    }
+
+    @RequestMapping(value = "/my_courses/{status}", method = RequestMethod.GET)
+    public String myCourses(@PathVariable("status") String status, Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        User user = userService.findByUsername(username);
+        Set<Course> enrolledCourses = user.getEnrolledCourses();
+        Set<Course> courses = new HashSet<>();
+        Long id = null;
+        if (status.equals("not_started")) {
+            id = 1L;
+        }
+        if (status.equals("in_progress")) {
+            id = 2L;
+        }
+        if (status.equals("completed")) {
+            id = 3L;
+        }
+        for (Course course : enrolledCourses) {
+            if (Objects.equals(course.getStatus().getId(), id)) {
+                courses.add(course);
+            }
+        }
+        model.addAttribute("courses", courses);
+        return "my_courses";
     }
 }

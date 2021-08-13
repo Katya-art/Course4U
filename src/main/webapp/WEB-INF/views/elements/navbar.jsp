@@ -12,6 +12,11 @@
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/add_course">
                         <spring:message code="addCourse"/></a>
                 </sec:authorize>
+                <sec:authorize access="hasRole('STUDENT')">
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}/my_courses/not_started">
+                        <spring:message code="myCourses"/></a>
+                    </a>
+                </sec:authorize>
             </ul>
         </div>
         <div class="navbar-header navbar-right">

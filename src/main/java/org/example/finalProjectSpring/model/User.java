@@ -43,7 +43,7 @@ public class User {
     private Set<Course> courses;
 
     //only for users with role STUDENT
-    @ManyToMany(mappedBy = "students")
+    @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
     private Set<Course> enrolledCourses;
 
     public Long getId() {

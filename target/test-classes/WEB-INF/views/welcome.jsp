@@ -54,10 +54,15 @@
                             <c:set var="contains" value="true"/>
                         </c:if>
                     </c:forEach>
-                    <c:if test="${!contains}">
+                    <c:choose>
+                    <c:when test="${!contains}">
                         <td><a href="${pageContext.request.contextPath}/enroll_course/${course.id}"
                                class="btn btn-primary mt-4"><spring:message code="enroll"/></a></td>
-                    </c:if>
+                    </c:when>
+                        <c:otherwise>
+                            <td><spring:message code="alreadyEnrolled"/></td>
+                        </c:otherwise>
+                    </c:choose>
                 </sec:authorize>
             </tr>
         </c:forEach>

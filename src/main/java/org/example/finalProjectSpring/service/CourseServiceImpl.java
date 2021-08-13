@@ -1,6 +1,7 @@
 package org.example.finalProjectSpring.service;
 
 import org.example.finalProjectSpring.dao.CourseDao;
+import org.example.finalProjectSpring.dao.StatusDao;
 import org.example.finalProjectSpring.model.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,12 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private CourseDao courseDao;
 
+    @Autowired
+    private StatusDao statusDao;
+
     @Override
     public void save(Course course) {
+        course.setStatus(statusDao.getOne(1L));
         courseDao.save(course);
     }
 

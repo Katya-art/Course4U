@@ -40,6 +40,11 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private Set<User> students;
 
+    @ManyToOne
+    @JoinTable(name = "course_status", joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "status_id"))
+    private Status status;
+
     public Long getId() {
         return id;
     }
@@ -94,5 +99,13 @@ public class Course {
 
     public void setStudents(Set<User> students) {
         this.students = students;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
