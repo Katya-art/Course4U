@@ -38,9 +38,13 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Role role;
 
-    //only for users with role ROLE_TEACHER
+    //only for users with role TEACHER
     @OneToMany(mappedBy = "teacher")
     private Set<Course> courses;
+
+    //only for users with role STUDENT
+    @ManyToMany(mappedBy = "students")
+    private Set<Course> enrolledCourses;
 
     public Long getId() {
         return id;
@@ -96,5 +100,21 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
+    public Set<Course> getEnrolledCourses() {
+        return enrolledCourses;
+    }
+
+    public void setEnrolledCourses(Set<Course> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
     }
 }

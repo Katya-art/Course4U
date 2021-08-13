@@ -1,6 +1,7 @@
 package org.example.finalProjectSpring.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Simple JavaBean domain object that represents a Course.
@@ -26,16 +27,18 @@ public class Course {
     @Column(name = "duration")
     private String duration;
 
-    @Column(name = "number_of_students")
-    private Long numberOfStudents;
+    @Transient
+    private String teacherName;
 
     @ManyToOne
     @JoinTable(name = "course_teacher", joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id"))
     private User teacher;
 
-    @Transient
-    private String teacherName;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "course_students", joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id"))
+    private Set<User> students;
 
     public Long getId() {
         return id;
@@ -69,12 +72,12 @@ public class Course {
         this.duration = duration;
     }
 
-    public Long getNumberOfStudents() {
-        return numberOfStudents;
+    public String getTeacherName() {
+        return teacherName;
     }
 
-    public void setNumberOfStudents(Long numberOfStudents) {
-        this.numberOfStudents = numberOfStudents;
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 
     public User getTeacher() {
@@ -85,11 +88,11 @@ public class Course {
         this.teacher = teacher;
     }
 
-    public String getTeacherName() {
-        return teacherName;
+    public Set<User> getStudents() {
+        return students;
     }
 
-    public void setTeacherName(String teacherName) {
-        this.teacherName = teacherName;
+    public void setStudents(Set<User> students) {
+        this.students = students;
     }
 }

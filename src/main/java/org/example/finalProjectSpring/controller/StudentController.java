@@ -1,18 +1,24 @@
 package org.example.finalProjectSpring.controller;
 
 import org.example.finalProjectSpring.dao.CourseDao;
+import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.User;
 import org.example.finalProjectSpring.service.CourseService;
 import org.example.finalProjectSpring.service.SecurityService;
 import org.example.finalProjectSpring.service.UserService;
 import org.example.finalProjectSpring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.Set;
 
 /**
  * Controller for student's pages.
@@ -29,6 +35,9 @@ public class StudentController {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private CourseService courseService;
 
     @Autowired
     private CourseDao courseDao;
@@ -75,5 +84,22 @@ public class StudentController {
     public String welcome(Model model) {
         model.addAttribute("coursesList", courseDao.findAll());
         return "welcome";
+    }
+
+    @RequestMapping(value ="/enroll_course/{id}", method = RequestMethod.GET)
+    public String enrollCourse(@PathVariable("id") Long id) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        Course course = courseService.findCourseById(id);
+        Set<User> students = course.getStudents();
+        students.add(userService.findByUsername(username));
+        course.setStudents(students);
+        courseService.save(course);
+        return "redirect:/welcome";
     }
 }

@@ -23,4 +23,6 @@ public interface UserService {
     List<User> findAllByRole(Role role);
 
     User findUserByFullName(String fullName);
+
+    User findUserById(Long id);
 }

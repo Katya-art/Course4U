@@ -31,10 +31,6 @@
             <th scope="col"><spring:message code="theme"/></th>
             <th scope="col"><spring:message code="duration"/></th>
             <th scope="col"><spring:message code="numberOfStudents"/></th>
-            <sec:authorize access="hasRole('ADMIN')">
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </sec:authorize>
         </tr>
         </thead>
         <tbody>
@@ -44,12 +40,24 @@
                 <td>${course.teacher.fullName}</td>
                 <td>${course.theme}</td>
                 <td>${course.duration}</td>
-                <td>${course.numberOfStudents}</td>
+                <td>${course.students.size()}</td>
                 <sec:authorize access="hasRole('ADMIN')">
                     <td><a href="${pageContext.request.contextPath}/edit_course/${course.id}"
                            class="btn btn-info mt-4"><spring:message code="edit"/></a></td>
                     <td><a href="${pageContext.request.contextPath}/delete_course/${course.id}"
                            class="btn btn-danger mt-4"><spring:message code="delete"/></a></td>
+                </sec:authorize>
+                <sec:authorize access="hasRole('STUDENT')">
+                    <c:set var="contains" value="false"/>
+                    <c:forEach var="student" items="${course.students}">
+                        <c:if test="${student.username eq pageContext.request.userPrincipal.name}">
+                            <c:set var="contains" value="true"/>
+                        </c:if>
+                    </c:forEach>
+                    <c:if test="${!contains}">
+                        <td><a href="${pageContext.request.contextPath}/enroll_course/${course.id}"
+                               class="btn btn-primary mt-4"><spring:message code="enroll"/></a></td>
+                    </c:if>
                 </sec:authorize>
             </tr>
         </c:forEach>

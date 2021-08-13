@@ -20,7 +20,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
-        course.setNumberOfStudents(0L);
         courseDao.save(course);
     }
 

@@ -49,6 +49,18 @@ CREATE TABLE IF NOT EXISTS course_teacher (
 )
     ENGINE = InnoDB;
 
+-- Table for mapping course and students: course_students
+CREATE TABLE IF NOT EXISTS course_students (
+                                              course_id INT NOT NULL,
+                                              student_id INT NOT NULL,
+
+                                              FOREIGN KEY (course_id) REFERENCES courses (id),
+                                              FOREIGN KEY (student_id) REFERENCES users (id),
+
+                                              UNIQUE (course_id, student_id)
+)
+    ENGINE = InnoDB;
+
 -- Insert data
 
 INSERT INTO users VALUES (1, 'Kateryna Kravchenko', 'KaterynaKravchenko', 'katakravchenko01@gmail.com',
