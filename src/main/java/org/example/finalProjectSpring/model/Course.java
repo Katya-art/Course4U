@@ -1,6 +1,7 @@
 package org.example.finalProjectSpring.model;
 
 import javax.persistence.*;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,9 +37,15 @@ public class Course {
     private User teacher;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "course_students", joinColumns = @JoinColumn(name = "course_id"),
+    @JoinTable(name = "course_students_marks", joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     private Set<User> students;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @MapKeyJoinColumn(name = "student_id")
+    @JoinTable(name = "course_students_marks", joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "mark_id"))
+    private Map<User, Mark> studentsMarks;
 
     @ManyToOne
     @JoinTable(name = "course_status", joinColumns = @JoinColumn(name = "course_id"),
@@ -99,6 +106,14 @@ public class Course {
 
     public void setStudents(Set<User> students) {
         this.students = students;
+    }
+
+    public Map<User, Mark> getStudentsMarks() {
+        return studentsMarks;
+    }
+
+    public void setStudentsMarks(Map<User, Mark> studentsMarks) {
+        this.studentsMarks = studentsMarks;
     }
 
     public Status getStatus() {

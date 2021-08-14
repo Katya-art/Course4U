@@ -33,7 +33,7 @@
         <c:forEach items="${courses}" var="course">
             <tr>
                 <td>${course.name}</td>
-                <td>${course.students.size()}</td>
+                <td>${course.studentsMarks.size()}</td>
                 <c:choose>
                     <c:when test="${course.status.id == 1}">
                         <td><a href="${pageContext.request.contextPath}/start_course/${course.id}"

@@ -56,11 +56,11 @@ CREATE TABLE IF NOT EXISTS course_teacher (
 )
     ENGINE = InnoDB;
 
--- Table for mapping course and students: course_students
-CREATE TABLE IF NOT EXISTS course_students (
+-- Table for mapping course, students and marks: course_students_marks
+CREATE TABLE IF NOT EXISTS course_students_marks (
                                               course_id INT NOT NULL,
                                               student_id INT NOT NULL,
-                                              mark_id INT NOT NULL,
+                                              mark_id INT NOT NULL ,
 
                                               FOREIGN KEY (course_id) REFERENCES courses (id),
                                               FOREIGN KEY (student_id) REFERENCES users (id),
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS statuses (
 )
     ENGINE = InnoDB;
 
--- Table for mapping user and role: user_roles
+-- Table for mapping course and status: course_status
 CREATE TABLE IF NOT EXISTS course_status (
                                           course_id INT NOT NULL,
                                           status_id INT NOT NULL,

@@ -40,7 +40,7 @@
                 <td>${course.teacher.fullName}</td>
                 <td>${course.theme}</td>
                 <td>${course.duration}</td>
-                <td>${course.students.size()}</td>
+                <td>${course.studentsMarks.size()}</td>
                 <sec:authorize access="hasRole('ADMIN')">
                     <td><a href="${pageContext.request.contextPath}/edit_course/${course.id}"
                            class="btn btn-info mt-4"><spring:message code="edit"/></a></td>
@@ -49,7 +49,7 @@
                 </sec:authorize>
                 <sec:authorize access="hasRole('STUDENT')">
                     <c:set var="contains" value="false"/>
-                    <c:forEach var="student" items="${course.students}">
+                    <c:forEach var="student" items="${course.studentsMarks.keySet()}">
                         <c:if test="${student.username eq pageContext.request.userPrincipal.name}">
                             <c:set var="contains" value="true"/>
                         </c:if>

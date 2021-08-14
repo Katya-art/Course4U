@@ -1,8 +1,10 @@
 package org.example.finalProjectSpring.controller;
 
 import org.example.finalProjectSpring.dao.CourseDao;
+import org.example.finalProjectSpring.dao.MarkDao;
 import org.example.finalProjectSpring.dao.StatusDao;
 import org.example.finalProjectSpring.model.Course;
+import org.example.finalProjectSpring.model.Mark;
 import org.example.finalProjectSpring.model.User;
 import org.example.finalProjectSpring.service.CourseService;
 import org.example.finalProjectSpring.service.SecurityService;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -45,6 +48,9 @@ public class StudentController {
 
     @Autowired
     private CourseDao courseDao;
+
+    @Autowired
+    private MarkDao markDao;
 
     @Autowired
     private UserValidator userValidator;
@@ -100,9 +106,12 @@ public class StudentController {
             username = principal.toString();
         }
         Course course = courseService.findCourseById(id);
-        Set<User> students = course.getStudents();
+        /*Set<User> students = course.getStudents();
         students.add(userService.findByUsername(username));
-        course.setStudents(students);
+        course.setStudents(students);*/
+        Map<User, Mark> studentsMarks = course.getStudentsMarks();
+        studentsMarks.put(userService.findByUsername(username), markDao.getOne(6L));
+        course.setStudentsMarks(studentsMarks);
         courseService.save(course);
         return "redirect:/welcome";
     }
