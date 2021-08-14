@@ -14,7 +14,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>In progress</title>
+    <title>My courses</title>
     <!--to show icons-->
     <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"-->
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -22,25 +22,28 @@
 <body>
 <jsp:include page="elements/navbar.jsp"/>
 <div class="container">
-    <h2><a href="${pageContext.request.contextPath}/not_started"><spring:message code="notStarted"/></a> |
-        <a href="${pageContext.request.contextPath}/in_progress"><spring:message code="inProgress"/></a> |
-        <a href="${pageContext.request.contextPath}/completed"><spring:message code="completed"/></a></h2>
     <table class="table">
         <thead class="thead-dark">
         <tr>
             <th scope="col"><spring:message code="courseName"/></th>
-            <th scope="col"><spring:message code="teacherName"/></th>
-            <th scope="col"><spring:message code="theme"/></th>
-            <th scope="col"><spring:message code="duration"/></th>
+            <th scope="col"><spring:message code="numberOfStudents"/></th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${courses}" var="course">
             <tr>
                 <td>${course.name}</td>
-                <td>${course.teacher.fullName}</td>
-                <td>${course.theme}</td>
-                <td>${course.duration}</td>
+                <td>${course.students.size()}</td>
+                <c:choose>
+                    <c:when test="${course.status.id == 1}">
+                        <td><a href="${pageContext.request.contextPath}/start_course/${course.id}"
+                               class="btn btn-primary mt-4"><spring:message code="startCourse"/></a></td>
+                    </c:when>
+                    <c:when test="${course.status.id == 2}">
+                        <td><a href="${pageContext.request.contextPath}/grade_journal/${course.id}"
+                               class="btn btn-primary mt-4"><spring:message code="gradeJournal"/></a></td>
+                    </c:when>
+                </c:choose>
             </tr>
         </c:forEach>
         </tbody>
@@ -57,4 +60,3 @@
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
-

@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS statuses (
 )
     ENGINE = InnoDB;
 
--- Table for mapping user and role: user_roles
+-- Table for mapping course and status: course_status
 CREATE TABLE IF NOT EXISTS course_status (
                                           course_id INT NOT NULL,
                                           status_id INT NOT NULL,

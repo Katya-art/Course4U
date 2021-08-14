@@ -15,7 +15,10 @@
                 <sec:authorize access="hasRole('STUDENT')">
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/my_courses/not_started">
                         <spring:message code="myCourses"/></a>
-                    </a>
+                </sec:authorize>
+                <sec:authorize access="hasRole('TEACHER')">
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}/assigned_courses">
+                        <spring:message code="myCourses"/></a>
                 </sec:authorize>
             </ul>
         </div>

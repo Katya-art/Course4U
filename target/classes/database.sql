@@ -37,6 +37,13 @@ CREATE TABLE IF NOT EXISTS courses (
 )
     ENGINE = InnoDB;
 
+-- Table: marks
+CREATE TABLE IF NOT EXISTS marks (
+                                     id   INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                     name VARCHAR(100) NOT NULL
+)
+    ENGINE = InnoDB;
+
 -- Table for mapping course and teacher: course_teacher
 CREATE TABLE IF NOT EXISTS course_teacher (
                                           course_id INT NOT NULL,
@@ -53,11 +60,13 @@ CREATE TABLE IF NOT EXISTS course_teacher (
 CREATE TABLE IF NOT EXISTS course_students (
                                               course_id INT NOT NULL,
                                               student_id INT NOT NULL,
+                                              mark_id INT NOT NULL,
 
                                               FOREIGN KEY (course_id) REFERENCES courses (id),
                                               FOREIGN KEY (student_id) REFERENCES users (id),
+                                              FOREIGN KEY (mark_id) REFERENCES marks (id),
 
-                                              UNIQUE (course_id, student_id)
+                                              UNIQUE (course_id, student_id, mark_id)
 )
     ENGINE = InnoDB;
 
@@ -94,3 +103,9 @@ INSERT INTO user_roles VALUES (1, 2);
 INSERT INTO statuses VALUES (1, 'NOT_STARTED');
 INSERT INTO statuses VALUES (2, 'IN_PROGRESS');
 INSERT INTO statuses VALUES (3, 'COMPLETED');
+
+INSERT INTO marks VALUES (1, 'A');
+INSERT INTO marks VALUES (2, 'B');
+INSERT INTO marks VALUES (3, 'C');
+INSERT INTO marks VALUES (4, 'D');
+INSERT INTO marks VALUES (5, 'E');

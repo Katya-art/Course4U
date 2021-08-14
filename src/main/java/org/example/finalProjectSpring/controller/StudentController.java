@@ -47,9 +47,6 @@ public class StudentController {
     private CourseDao courseDao;
 
     @Autowired
-    private StatusDao statusDao;
-
-    @Autowired
     private UserValidator userValidator;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -111,7 +108,7 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/my_courses/{status}", method = RequestMethod.GET)
-    public String myCourses(@PathVariable("status") String status, Model model) {
+    public String studentCourses(@PathVariable("status") String status, Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
         if (principal instanceof UserDetails) {
@@ -138,6 +135,6 @@ public class StudentController {
             }
         }
         model.addAttribute("courses", courses);
-        return "my_courses";
+        return "student_courses";
     }
 }

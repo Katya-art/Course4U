@@ -1,6 +1,7 @@
 package org.example.finalProjectSpring.controller;
 
 import org.example.finalProjectSpring.dao.RoleDao;
+import org.example.finalProjectSpring.dao.StatusDao;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.User;
 import org.example.finalProjectSpring.service.CourseService;
@@ -41,6 +42,9 @@ public class AdminController {
     @Autowired
     private RoleDao roleDao;
 
+    @Autowired
+    private StatusDao statusDao;
+
     @RequestMapping(value = "/add_teacher", method = RequestMethod.GET)
     public String addTeacher(Model model) {
         model.addAttribute("teacherForm", new User());
@@ -79,8 +83,8 @@ public class AdminController {
             return "add_course";
         }
         courseForm.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
+        courseForm.setStatus(statusDao.getOne(1L));
         courseService.save(courseForm);
-
         return "redirect:/welcome";
     }
 

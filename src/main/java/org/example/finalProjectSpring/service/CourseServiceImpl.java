@@ -24,7 +24,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
-        course.setStatus(statusDao.getOne(1L));
         courseDao.save(course);
     }
 

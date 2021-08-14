@@ -39,8 +39,8 @@ public class User {
     private Role role;
 
     //only for users with role TEACHER
-    @OneToMany(mappedBy = "teacher")
-    private Set<Course> courses;
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER)
+    private Set<Course> assignedCourses;
 
     //only for users with role STUDENT
     @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
@@ -102,12 +102,12 @@ public class User {
         this.role = role;
     }
 
-    public Set<Course> getCourses() {
-        return courses;
+    public Set<Course> getAssignedCourses() {
+        return assignedCourses;
     }
 
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
+    public void setAssignedCourses(Set<Course> courses) {
+        this.assignedCourses = courses;
     }
 
     public Set<Course> getEnrolledCourses() {
