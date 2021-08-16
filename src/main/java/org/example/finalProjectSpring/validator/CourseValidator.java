@@ -37,7 +37,7 @@ public class CourseValidator implements Validator {
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "duration", "required");
-        if (!course.getDuration().trim().matches("\\d")) {
+        if (!course.getDuration().trim().matches("\\d+")) {
             errors.rejectValue("duration", "wrongDuration");
         }
 

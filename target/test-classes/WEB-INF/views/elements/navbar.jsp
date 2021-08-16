@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <nav class="navbar navbar-default navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -34,6 +35,11 @@
                 <form id="logoutForm" method="POST" action="${pageContext.request.contextPath}/logout">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
+                <c:if test="${pageContext.request.userPrincipal.name != null}">
+                    <a class="navbar-brand"
+                       href="${pageContext.request.contextPath}/user/${pageContext.request.userPrincipal.name}">
+                            ${pageContext.request.userPrincipal.name}</a>
+                </c:if>
                 <a class="navbar-brand" onclick="document.forms['logoutForm'].submit()">
                     <spring:message code="logout"/></a>
             </sec:authorize>

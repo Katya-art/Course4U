@@ -32,6 +32,9 @@
             <th scope="col"><spring:message code="teacherName"/></th>
             <th scope="col"><spring:message code="theme"/></th>
             <th scope="col"><spring:message code="duration"/></th>
+            <c:if test="${status.equals('completed')}">
+                <th scope="col"><spring:message code="mark"/></th>
+            </c:if>
         </tr>
         </thead>
         <tbody>
@@ -41,6 +44,9 @@
                 <td>${course.teacher.fullName}</td>
                 <td>${course.theme}</td>
                 <td>${course.duration}</td>
+                <c:if test="${status.equals('completed')}">
+                    <td>${course.studentsMarks.get(user).name}</td>
+                </c:if>
             </tr>
         </c:forEach>
         </tbody>

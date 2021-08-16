@@ -41,60 +41,10 @@ public class StudentController {
     private UserService userService;
 
     @Autowired
-    private SecurityService securityService;
-
-    @Autowired
     private CourseService courseService;
 
     @Autowired
-    private CourseDao courseDao;
-
-    @Autowired
     private MarkDao markDao;
-
-    @Autowired
-    private UserValidator userValidator;
-
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
-    public String registration(Model model) {
-        model.addAttribute("userForm", new User());
-
-        return "registration";
-    }
-
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
-        userValidator.validate(userForm, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-
-        userService.save(userForm, 1L);
-
-        securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
-
-        return "redirect:/welcome";
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(Model model, String error, String logout) {
-        if (error != null) {
-            model.addAttribute("error", "Username or password is incorrect.");
-        }
-
-        if (logout != null) {
-            model.addAttribute("message", "Logged out successfully.");
-        }
-
-        return "login";
-    }
-
-    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
-    public String welcome(Model model) {
-        model.addAttribute("coursesList", courseDao.findAll());
-        return "welcome";
-    }
 
     @RequestMapping(value ="/enroll_course/{id}", method = RequestMethod.GET)
     public String enrollCourse(@PathVariable("id") Long id) {
@@ -144,6 +94,8 @@ public class StudentController {
             }
         }
         model.addAttribute("courses", courses);
+        model.addAttribute("user", user);
+        model.addAttribute("status", status);
         return "student_courses";
     }
 }

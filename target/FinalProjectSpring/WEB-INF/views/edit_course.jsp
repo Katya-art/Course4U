@@ -28,47 +28,64 @@
 <body>
 
 <div class="container">
-
-    <form:form method="POST" modelAttribute="editForm" class="form-signin">
-        <h2 class="form-signin-heading"><spring:message code="edit"/></h2>
-        <spring:bind path="name">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:label path="name"><spring:message code="courseName"/></form:label>
-                <form:input type="text" path="name" class="form-control" autofocus="true"/>
-                <form:errors path="name"/>
-            </div>
-        </spring:bind>
-
-        <spring:bind path="theme">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:label path="theme"><spring:message code="theme"/></form:label>
-                <form:input type="text" path="theme" class="form-control" />
-                <form:errors path="theme"/>
-            </div>
-        </spring:bind>
-
-        <spring:bind path="duration">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:label path="duration"><spring:message code="duration"/></form:label>
-                <form:input type="text" path="duration" class="form-control" />
-                <form:errors path="duration"/>
-            </div>
-        </spring:bind>
-
-        <spring:bind path="teacherName">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:label path="teacherName"><spring:message code="teacherName"/></form:label>
-                <form:select path="teacherName">
-                    <c:forEach items="${teachers}" var="teacher">
-                        <form:option value="${teacher.fullName}">${teacher.fullName}</form:option>
-                    </c:forEach>
-                </form:select>
-                <br>
-                <form:errors path="teacherName"/>
-            </div>
-        </spring:bind>
-
-        <button class="btn btn-lg btn-primary btn-block" type="submit"><spring:message code="save"/></button>
+    <h2 class="form-signin-heading"><spring:message code="edit"/></h2>
+    <form:form method="POST" modelAttribute="editForm">
+        <table class="table">
+            <tbody>
+            <tr>
+                <td><spring:message code="courseName"/></td>
+                <td>
+                    <spring:bind path="name">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" path="name" class="form-control" autofocus="true"/>
+                            <form:errors path="name"/>
+                        </div>
+                    </spring:bind>
+                </td>
+            </tr>
+            <tr>
+                <td><spring:message code="theme"/></td>
+                <td>
+                    <spring:bind path="theme">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" path="theme" class="form-control"/>
+                            <form:errors path="theme"/>
+                        </div>
+                    </spring:bind>
+                </td>
+            </tr>
+            <tr>
+                <td><spring:message code="duration"/></td>
+                <td>
+                    <spring:bind path="duration">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" path="duration" class="form-control"/>
+                            <form:errors path="duration"/>
+                        </div>
+                    </spring:bind>
+                </td>
+            </tr>
+            <tr>
+                <td><spring:message code="teacherName"/></td>
+                <td>
+                    <spring:bind path="teacherName">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:select path="teacherName">
+                                <c:forEach items="${teachers}" var="teacher">
+                                    <form:option value="${teacher.fullName}">${teacher.fullName}</form:option>
+                                </c:forEach>
+                            </form:select>
+                            <br>
+                            <form:errors path="teacherName"/>
+                        </div>
+                    </spring:bind>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-lg btn-primary btn-block" style="width: 13%; float: right" type="submit">
+            <spring:message code="save"/>
+        </button>
     </form:form>
 
 </div>

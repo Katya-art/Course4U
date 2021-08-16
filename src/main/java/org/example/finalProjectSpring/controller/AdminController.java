@@ -104,17 +104,20 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.POST)
-    public String editCourse(@ModelAttribute("courseForm") Course courseForm, BindingResult bindingResult, Model model) {
+    public String editCourse(@PathVariable("id")Long id, @ModelAttribute("courseForm") Course courseForm,
+                             BindingResult bindingResult, Model model) {
         courseValidator.validate(courseForm, bindingResult);
-
         if (bindingResult.hasErrors()) {
             //???
             model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
             return "add_course";
         }
-        courseForm.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
-        courseService.save(courseForm);
-
+        Course course = courseService.findCourseById(id);
+        course.setName(courseForm.getName());
+        course.setTheme(courseForm.getTheme());
+        course.setDuration(courseForm.getDuration());
+        course.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
+        courseService.save(course);
         return "redirect:/welcome";
     }
 }

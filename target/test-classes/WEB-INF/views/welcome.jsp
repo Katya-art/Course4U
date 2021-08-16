@@ -35,6 +35,7 @@
         </thead>
         <tbody>
         <c:forEach items="${coursesList}" var="course">
+            <c:if test="${course.status.id != 3}">
             <tr>
                 <td>${course.name}</td>
                 <td>${course.teacher.fullName}</td>
@@ -65,6 +66,7 @@
                     </c:choose>
                 </sec:authorize>
             </tr>
+            </c:if>
         </c:forEach>
         </tbody>
     </table>

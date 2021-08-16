@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -78,11 +79,19 @@ public class TeacherController {
                               @RequestParam(value = "marks", required = false) Long[] marks,
                               @RequestParam(value = "students", required = false) Long[] students) {
         Course course = courseService.findCourseById(id);
-        Map<User, Mark> userMarkMap = course.getStudentsMarks();
+        Map<User, Mark> userMarkMap = new HashMap<>();
         for (int i = 0; i < marks.length; i++) {
             userMarkMap.put(userService.findUserById(students[i]), markService.findMarkById(marks[i]));
         }
         course.setStudentsMarks(userMarkMap);
+        courseService.save(course);
+        return "redirect:/assigned_courses";
+    }
+
+    @RequestMapping(value ="/finish_course/{id}", method = RequestMethod.GET)
+    public String finishCourse(@PathVariable("id") Long id) {
+        Course course = courseService.findCourseById(id);
+        course.setStatus(statusDao.getOne(3L));
         courseService.save(course);
         return "redirect:/assigned_courses";
     }
