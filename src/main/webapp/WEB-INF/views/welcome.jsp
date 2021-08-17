@@ -35,7 +35,7 @@
         </thead>
         <tbody>
         <c:forEach items="${coursesList}" var="course">
-            <c:if test="${course.status.id != 3}">
+            <c:if test="${course.condition.id != 3}">
             <tr>
                 <td>${course.name}</td>
                 <td>${course.teacher.fullName}</td>
@@ -49,19 +49,26 @@
                            class="btn btn-danger mt-4"><spring:message code="delete"/></a></td>
                 </sec:authorize>
                 <sec:authorize access="hasRole('STUDENT')">
-                    <c:set var="contains" value="false"/>
-                    <c:forEach var="student" items="${course.studentsMarks.keySet()}">
-                        <c:if test="${student.username eq pageContext.request.userPrincipal.name}">
-                            <c:set var="contains" value="true"/>
-                        </c:if>
-                    </c:forEach>
                     <c:choose>
-                    <c:when test="${!contains}">
-                        <td><a href="${pageContext.request.contextPath}/enroll_course/${course.id}"
-                               class="btn btn-primary mt-4"><spring:message code="enroll"/></a></td>
-                    </c:when>
+                        <c:when test="${user.status.id == 1}">
+                            <c:set var="contains" value="false"/>
+                            <c:forEach var="student" items="${course.studentsMarks.keySet()}">
+                                <c:if test="${student.username eq pageContext.request.userPrincipal.name}">
+                                    <c:set var="contains" value="true"/>
+                                </c:if>
+                            </c:forEach>
+                            <c:choose>
+                                <c:when test="${!contains}">
+                                    <td><a href="${pageContext.request.contextPath}/enroll_course/${course.id}"
+                                           class="btn btn-primary mt-4"><spring:message code="enroll"/></a></td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td><spring:message code="alreadyEnrolled"/></td>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:when>
                         <c:otherwise>
-                            <td><spring:message code="alreadyEnrolled"/></td>
+                            <td><spring:message code="yourAccountWasBlocked"/></td>
                         </c:otherwise>
                     </c:choose>
                 </sec:authorize>

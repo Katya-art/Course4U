@@ -14,31 +14,31 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>My courses</title>
+    <title>List of students</title>
     <!--to show icons-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"-->
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <jsp:include page="elements/navbar.jsp"/>
 <div class="container">
-    <h2 style="text-align: center">${user.username}</h2>
-    <h4 style="text-align: center">${user.role.name.replace("ROLE_", "")}</h4>
-    <sec:authorize access="hasRole('STUDENT')">
-        <c:if test="${user.status.id == 2}">
-            <h5 style="text-align: center"><spring:message code="yourAccountWasBlocked"/></h5>
-        </c:if>
-    </sec:authorize>
     <table class="table">
         <tbody>
-        <tr>
-            <td><spring:message code="fullName"/></td>
-            <td>${user.fullName}</td>
-        </tr>
-        <tr>
-            <td><spring:message code="email"/></td>
-            <td>${user.email}</td>
-        </tr>
+        <c:forEach items="${studentsList}" var="student">
+            <tr>
+                <td>${student.fullName}</td>
+                <c:choose>
+                    <c:when test="${student.status.id == 1}">
+                        <td><a href="${pageContext.request.contextPath}/block_student/${student.id}"
+                               class="btn btn-info mt-4"><spring:message code="blockStudent"/></a></td>
+                    </c:when>
+                    <c:otherwise>
+                        <td><a href="${pageContext.request.contextPath}/unlock_student/${student.id}"
+                               class="btn btn-info mt-4"><spring:message code="unlockStudent"/></a></td>
+                    </c:otherwise>
+                </c:choose>
+            </tr>
+        </c:forEach>
         </tbody>
     </table>
 
@@ -53,3 +53,4 @@
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
+

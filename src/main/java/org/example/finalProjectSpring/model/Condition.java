@@ -4,15 +4,15 @@ import javax.persistence.*;
 import java.util.Set;
 
 /**
- * Simple JavaBean object that represents student's status.
+ * Simple JavaBean object that represents {@link Course}'s condition.
  *
  * @author Kateryna Kravchenko
  * @version 1.0
  */
 
 @Entity
-@Table(name = "statuses")
-public class Status {
+@Table(name = "conditions")
+public class Condition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,8 +21,8 @@ public class Status {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "status")
-    private Set<User> students;
+    @OneToMany(mappedBy = "condition")
+    private Set<Course> courses;
 
     public Long getId() {
         return id;
@@ -40,11 +40,11 @@ public class Status {
         this.name = name;
     }
 
-    public Set<User> getStudents() {
-        return students;
+    public Set<Course> getCourses() {
+        return courses;
     }
 
-    public void setStudents(Set<User> students) {
-        this.students = students;
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 }

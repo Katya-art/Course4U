@@ -35,11 +35,11 @@
                 <td>${course.name}</td>
                 <td>${course.studentsMarks.size()}</td>
                 <c:choose>
-                    <c:when test="${course.status.id == 1}">
+                    <c:when test="${course.condition.id == 1}">
                         <td><a href="${pageContext.request.contextPath}/start_course/${course.id}"
                                class="btn btn-primary mt-4"><spring:message code="startCourse"/></a></td>
                     </c:when>
-                    <c:when test="${course.status.id == 2}">
+                    <c:when test="${course.condition.id == 2}">
                         <td><a href="${pageContext.request.contextPath}/grade_journal/${course.id}"
                                class="btn btn-primary mt-4"><spring:message code="gradeJournal"/></a></td>
                         <td><a href="${pageContext.request.contextPath}/finish_course/${course.id}"

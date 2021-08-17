@@ -70,22 +70,41 @@ CREATE TABLE IF NOT EXISTS course_students_marks (
 )
     ENGINE = InnoDB;
 
--- Table: statuses
-CREATE TABLE IF NOT EXISTS statuses (
+-- Table: conditions
+CREATE TABLE IF NOT EXISTS conditions (
                                      id   INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                      name VARCHAR(100) NOT NULL
 )
     ENGINE = InnoDB;
 
--- Table for mapping course and status: course_status
-CREATE TABLE IF NOT EXISTS course_status (
+-- Table for mapping course and condition: course_condition
+CREATE TABLE IF NOT EXISTS course_conditions (
                                           course_id INT NOT NULL,
-                                          status_id INT NOT NULL,
+                                          condition_id INT NOT NULL,
 
-                                          FOREIGN KEY (course_id) REFERENCES users (id),
-                                          FOREIGN KEY (status_id) REFERENCES roles (id),
+                                          FOREIGN KEY (course_id) REFERENCES courses (id),
+                                          FOREIGN KEY (condition_id) REFERENCES conditions (id),
 
-                                          UNIQUE (course_id, status_id)
+                                          UNIQUE (course_id, condition_id)
+)
+    ENGINE = InnoDB;
+
+-- Table: statuses
+CREATE TABLE IF NOT EXISTS statuses (
+                                          id   INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                          name VARCHAR(100) NOT NULL
+)
+    ENGINE = InnoDB;
+
+-- Table for mapping student and condition: student_status
+CREATE TABLE IF NOT EXISTS student_status (
+                                                 student_id INT NOT NULL,
+                                                 status_id INT NOT NULL,
+
+                                                 FOREIGN KEY (student_id) REFERENCES users (id),
+                                                 FOREIGN KEY (status_id) REFERENCES statuses (id),
+
+                                                 UNIQUE (student_id, status_id)
 )
     ENGINE = InnoDB;
 
@@ -94,18 +113,21 @@ CREATE TABLE IF NOT EXISTS course_status (
 INSERT INTO users VALUES (1, 'Kateryna Kravchenko', 'KaterynaKravchenko', 'katakravchenko01@gmail.com',
                           '$2a$11$uSXS6rLJ91WjgOHhEGDx..VGs7MkKZV68Lv5r1uwFu7HgtRn3dcXG');
 
-INSERT INTO roles VALUES (1, 'ROLE_USER');
+INSERT INTO roles VALUES (1, 'ROLE_STUDENT');
 INSERT INTO roles VALUES (2, 'ROLE_ADMIN');
 INSERT INTO roles VALUE (3, 'ROLE_TEACHER');
 
 INSERT INTO user_roles VALUES (1, 2);
 
-INSERT INTO statuses VALUES (1, 'NOT_STARTED');
-INSERT INTO statuses VALUES (2, 'IN_PROGRESS');
-INSERT INTO statuses VALUES (3, 'COMPLETED');
+INSERT INTO conditions VALUES (1, 'NOT_STARTED');
+INSERT INTO conditions VALUES (2, 'IN_PROGRESS');
+INSERT INTO conditions VALUES (3, 'COMPLETED');
 
 INSERT INTO marks VALUES (1, 'A');
 INSERT INTO marks VALUES (2, 'B');
 INSERT INTO marks VALUES (3, 'C');
 INSERT INTO marks VALUES (4, 'D');
 INSERT INTO marks VALUES (5, 'E');
+
+INSERT INTO statuses VALUES (1, 'UNLOCK');
+INSERT INTO statuses VALUES (2, 'BLOCKED');

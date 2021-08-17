@@ -48,9 +48,9 @@ public class Course {
     private Map<User, Mark> studentsMarks;
 
     @ManyToOne
-    @JoinTable(name = "course_status", joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "status_id"))
-    private Status status;
+    @JoinTable(name = "course_conditions", joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "condition_id"))
+    private Condition condition;
 
     public Long getId() {
         return id;
@@ -116,11 +116,11 @@ public class Course {
         this.studentsMarks = studentsMarks;
     }
 
-    public Status getStatus() {
-        return status;
+    public Condition getCondition() {
+        return condition;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setCondition(Condition condition) {
+        this.condition = condition;
     }
 }

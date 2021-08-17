@@ -1,6 +1,7 @@
 package org.example.finalProjectSpring.controller;
 
 import org.example.finalProjectSpring.dao.RoleDao;
+import org.example.finalProjectSpring.dao.ConditionDao;
 import org.example.finalProjectSpring.dao.StatusDao;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.User;
@@ -9,6 +10,7 @@ import org.example.finalProjectSpring.service.UserService;
 import org.example.finalProjectSpring.validator.CourseValidator;
 import org.example.finalProjectSpring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,25 +45,29 @@ public class AdminController {
     private RoleDao roleDao;
 
     @Autowired
+    private ConditionDao conditionDao;
+
+    @Autowired
     private StatusDao statusDao;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @RequestMapping(value = "/add_teacher", method = RequestMethod.GET)
     public String addTeacher(Model model) {
         model.addAttribute("teacherForm", new User());
-
         return "add_teacher";
     }
 
     @RequestMapping(value = "/add_teacher", method = RequestMethod.POST)
     public String addTeacher(@ModelAttribute("teacherForm") User teacherForm, BindingResult bindingResult) {
         userValidator.validate(teacherForm, bindingResult);
-
         if (bindingResult.hasErrors()) {
             return "add_teacher";
         }
-
-        userService.save(teacherForm, 3L);
-
+        teacherForm.setPassword(bCryptPasswordEncoder.encode(teacherForm.getPassword()));
+        teacherForm.setRole(roleDao.getOne(3L));
+        userService.save(teacherForm);
         return "redirect:/welcome";
     }
 
@@ -69,21 +75,19 @@ public class AdminController {
     public String addCourse(Model model) {
         model.addAttribute("courseForm", new Course());
         model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
-
         return "add_course";
     }
 
     @RequestMapping(value = "/add_course", method = RequestMethod.POST)
     public String addCourse(@ModelAttribute("courseForm") Course courseForm, BindingResult bindingResult, Model model) {
         courseValidator.validate(courseForm, bindingResult);
-
         if (bindingResult.hasErrors()) {
             //???
             model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
             return "add_course";
         }
         courseForm.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
-        courseForm.setStatus(statusDao.getOne(1L));
+        courseForm.setCondition(conditionDao.getOne(1L));
         courseService.save(courseForm);
         return "redirect:/welcome";
     }
@@ -119,5 +123,27 @@ public class AdminController {
         course.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
         courseService.save(course);
         return "redirect:/welcome";
+    }
+
+    @RequestMapping(value = "/students_list", method = RequestMethod.GET)
+    public String studentsList(Model model) {
+        model.addAttribute("studentsList", userService.findAllByRole(roleDao.getOne(1L)));
+        return "students_list";
+    }
+
+    @RequestMapping(value ="/block_student/{id}", method = RequestMethod.GET)
+    public String blockStudent(@PathVariable("id") Long id) {
+        User student = userService.findUserById(id);
+        student.setStatus(statusDao.getOne(2L));
+        userService.save(student);
+        return "redirect:/students_list";
+    }
+
+    @RequestMapping(value ="/unlock_student/{id}", method = RequestMethod.GET)
+    public String unlockStudent(@PathVariable("id") Long id) {
+        User student = userService.findUserById(id);
+        student.setStatus(statusDao.getOne(1L));
+        userService.save(student);
+        return "redirect:/students_list";
     }
 }

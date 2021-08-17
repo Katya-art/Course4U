@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface UserService {
 
-    void save(User user, Long roleId);
+    void save(User user);
 
     User findByUsername(String username);
 

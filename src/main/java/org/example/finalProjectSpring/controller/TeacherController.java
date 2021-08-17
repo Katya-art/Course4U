@@ -1,7 +1,7 @@
 package org.example.finalProjectSpring.controller;
 
 import org.example.finalProjectSpring.dao.MarkDao;
-import org.example.finalProjectSpring.dao.StatusDao;
+import org.example.finalProjectSpring.dao.ConditionDao;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.Mark;
 import org.example.finalProjectSpring.model.User;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public class TeacherController {
     MarkService markService;
 
     @Autowired
-    StatusDao statusDao;
+    ConditionDao conditionDao;
 
     @Autowired
     MarkDao markDao;
@@ -61,7 +60,7 @@ public class TeacherController {
     @RequestMapping(value ="/start_course/{id}", method = RequestMethod.GET)
     public String startCourse(@PathVariable("id") Long id) {
         Course course = courseService.findCourseById(id);
-        course.setStatus(statusDao.getOne(2L));
+        course.setCondition(conditionDao.getOne(2L));
         courseService.save(course);
         return "redirect:/assigned_courses";
     }
@@ -91,7 +90,7 @@ public class TeacherController {
     @RequestMapping(value ="/finish_course/{id}", method = RequestMethod.GET)
     public String finishCourse(@PathVariable("id") Long id) {
         Course course = courseService.findCourseById(id);
-        course.setStatus(statusDao.getOne(3L));
+        course.setCondition(conditionDao.getOne(3L));
         courseService.save(course);
         return "redirect:/assigned_courses";
     }

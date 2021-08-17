@@ -12,6 +12,8 @@
                         <spring:message code="addTeacher"/></a>
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/add_course">
                         <spring:message code="addCourse"/></a>
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}/students_list">
+                        <spring:message code="studentsList"/></a>
                 </sec:authorize>
                 <sec:authorize access="hasRole('STUDENT')">
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/my_courses/not_started">

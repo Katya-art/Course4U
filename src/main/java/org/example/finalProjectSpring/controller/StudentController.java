@@ -1,23 +1,16 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.dao.CourseDao;
 import org.example.finalProjectSpring.dao.MarkDao;
-import org.example.finalProjectSpring.dao.StatusDao;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.Mark;
 import org.example.finalProjectSpring.model.User;
 import org.example.finalProjectSpring.service.CourseService;
-import org.example.finalProjectSpring.service.SecurityService;
 import org.example.finalProjectSpring.service.UserService;
-import org.example.finalProjectSpring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -89,7 +82,7 @@ public class StudentController {
             id = 3L;
         }
         for (Course course : enrolledCourses) {
-            if (Objects.equals(course.getStatus().getId(), id)) {
+            if (Objects.equals(course.getCondition().getId(), id)) {
                 courses.add(course);
             }
         }

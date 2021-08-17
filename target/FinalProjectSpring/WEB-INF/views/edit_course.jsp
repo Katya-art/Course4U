@@ -36,7 +36,7 @@
                 <td><spring:message code="courseName"/></td>
                 <td>
                     <spring:bind path="name">
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <div class="form-group ${condition.error ? 'has-error' : ''}">
                             <form:input type="text" path="name" class="form-control" autofocus="true"/>
                             <form:errors path="name"/>
                         </div>
@@ -47,7 +47,7 @@
                 <td><spring:message code="theme"/></td>
                 <td>
                     <spring:bind path="theme">
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <div class="form-group ${condition.error ? 'has-error' : ''}">
                             <form:input type="text" path="theme" class="form-control"/>
                             <form:errors path="theme"/>
                         </div>
@@ -58,7 +58,7 @@
                 <td><spring:message code="duration"/></td>
                 <td>
                     <spring:bind path="duration">
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <div class="form-group ${condition.error ? 'has-error' : ''}">
                             <form:input type="text" path="duration" class="form-control"/>
                             <form:errors path="duration"/>
                         </div>
@@ -69,7 +69,7 @@
                 <td><spring:message code="teacherName"/></td>
                 <td>
                     <spring:bind path="teacherName">
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <div class="form-group ${condition.error ? 'has-error' : ''}">
                             <form:select path="teacherName">
                                 <c:forEach items="${teachers}" var="teacher">
                                     <form:option value="${teacher.fullName}">${teacher.fullName}</form:option>

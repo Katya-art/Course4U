@@ -1,7 +1,7 @@
 package org.example.finalProjectSpring.service;
 
 import org.example.finalProjectSpring.dao.CourseDao;
-import org.example.finalProjectSpring.dao.StatusDao;
+import org.example.finalProjectSpring.dao.ConditionDao;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.Mark;
 import org.example.finalProjectSpring.model.User;
@@ -25,7 +25,7 @@ public class CourseServiceImpl implements CourseService {
     private CourseDao courseDao;
 
     @Autowired
-    private StatusDao statusDao;
+    private ConditionDao conditionDao;
 
     @Override
     public void save(Course course) {

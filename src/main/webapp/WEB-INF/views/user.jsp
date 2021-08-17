@@ -24,6 +24,11 @@
 <div class="container">
     <h2 style="text-align: center">${user.username}</h2>
     <h4 style="text-align: center">${user.role.name.replace("ROLE_", "")}</h4>
+    <sec:authorize access="hasRole('STUDENT')">
+        <c:if test="${user.status.id == 2}">
+            <h5 style="text-align: center"><spring:message code="yourAccountWasBlocked"/></h5>
+        </c:if>
+    </sec:authorize>
     <table class="table">
         <tbody>
         <tr>

@@ -46,6 +46,11 @@ public class User {
     @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
     private Set<Course> enrolledCourses;
 
+    @ManyToOne
+    @JoinTable(name = "student_status", joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "status_id"))
+    private Status status;
+
     public Long getId() {
         return id;
     }
@@ -116,5 +121,13 @@ public class User {
 
     public void setEnrolledCourses(Set<Course> enrolledCourses) {
         this.enrolledCourses = enrolledCourses;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

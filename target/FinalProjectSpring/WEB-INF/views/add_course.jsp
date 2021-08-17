@@ -32,7 +32,7 @@
     <form:form method="POST" modelAttribute="courseForm" class="form-signin">
         <h2 class="form-signin-heading"><spring:message code="newCourse"/></h2>
         <spring:bind path="name">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
+            <div class="form-group ${condition.error ? 'has-error' : ''}">
                 <spring:message code="courseName" var="name"/>
                 <form:input type="text" path="name" class="form-control" placeholder="${name}"
                             autofocus="true"/>
@@ -41,7 +41,7 @@
         </spring:bind>
 
         <spring:bind path="theme">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
+            <div class="form-group ${condition.error ? 'has-error' : ''}">
                 <spring:message code="theme" var="theme"/>
                 <form:input type="text" path="theme" class="form-control" placeholder="${theme}"/>
                 <form:errors path="theme"/>
@@ -49,7 +49,7 @@
         </spring:bind>
 
         <spring:bind path="duration">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
+            <div class="form-group ${condition.error ? 'has-error' : ''}">
                 <spring:message code="duration" var="duration"/>
                 <form:input type="text" path="duration" class="form-control" placeholder="${duration}"/>
                 <form:errors path="duration"/>
@@ -57,7 +57,7 @@
         </spring:bind>
 
         <spring:bind path="teacherName">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
+            <div class="form-group ${condition.error ? 'has-error' : ''}">
                 <form:select path="teacherName">
                     <form:option value="NONE"><spring:message code="selectTeacher"/></form:option>
                     <c:forEach items="${teachers}" var="teacher">

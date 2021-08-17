@@ -1,7 +1,8 @@
 package org.example.finalProjectSpring.controller;
 
 import org.example.finalProjectSpring.dao.CourseDao;
-import org.example.finalProjectSpring.model.Course;
+import org.example.finalProjectSpring.dao.RoleDao;
+import org.example.finalProjectSpring.dao.StatusDao;
 import org.example.finalProjectSpring.model.User;
 import org.example.finalProjectSpring.service.SecurityService;
 import org.example.finalProjectSpring.service.UserService;
@@ -9,6 +10,7 @@ import org.example.finalProjectSpring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 /**
  * Controller for all user's pages.
@@ -38,7 +36,16 @@ public class MainController {
     private SecurityService securityService;
 
     @Autowired
+    private RoleDao roleDao;
+
+    @Autowired
     private CourseDao courseDao;
+
+    @Autowired
+    private StatusDao statusDao;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private UserValidator userValidator;
@@ -57,8 +64,10 @@ public class MainController {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-
-        userService.save(userForm, 1L);
+        userForm.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
+        userForm.setRole(roleDao.getOne(1L));
+        userForm.setStatus(statusDao.getOne(1L));
+        userService.save(userForm);
 
         securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
 
@@ -67,6 +76,7 @@ public class MainController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
+
         if (error != null) {
             model.addAttribute("error", "Username or password is incorrect.");
         }
@@ -80,6 +90,14 @@ public class MainController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        model.addAttribute("user", userService.findByUsername(username));
         model.addAttribute("coursesList", courseDao.findAll());
         return "welcome";
     }
