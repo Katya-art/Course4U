@@ -130,4 +130,6 @@ public class User {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+
 }

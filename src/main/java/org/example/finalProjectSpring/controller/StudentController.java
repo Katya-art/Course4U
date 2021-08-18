@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -40,7 +41,8 @@ public class StudentController {
     private MarkDao markDao;
 
     @RequestMapping(value ="/enroll_course/{id}", method = RequestMethod.GET)
-    public String enrollCourse(@PathVariable("id") Long id) {
+    public String enrollCourse(@PathVariable("id") Long id, @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField,
+                               @RequestParam("sortDir") String sortDir, Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
         if (principal instanceof UserDetails) {
@@ -49,14 +51,11 @@ public class StudentController {
             username = principal.toString();
         }
         Course course = courseService.findCourseById(id);
-        /*Set<User> students = course.getStudents();
-        students.add(userService.findByUsername(username));
-        course.setStudents(students);*/
         Map<User, Mark> studentsMarks = course.getStudentsMarks();
         studentsMarks.put(userService.findByUsername(username), markDao.getOne(6L));
         course.setStudentsMarks(studentsMarks);
         courseService.save(course);
-        return "redirect:/welcome";
+        return String.format("redirect:/page/%s?sortField=%s&sortDir=%s", pageNo, sortField, sortDir);
     }
 
     @RequestMapping(value = "/my_courses/{status}", method = RequestMethod.GET)

@@ -51,7 +51,7 @@
         <spring:bind path="duration">
             <div class="form-group ${condition.error ? 'has-error' : ''}">
                 <spring:message code="duration" var="duration"/>
-                <form:input type="text" path="duration" class="form-control" placeholder="${duration}"/>
+                <form:input type="number" path="duration" class="form-control" placeholder="${duration}"/>
                 <form:errors path="duration"/>
             </div>
         </spring:bind>

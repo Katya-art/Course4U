@@ -14,10 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller for admin's pages.
@@ -93,13 +90,15 @@ public class AdminController {
     }
 
     @RequestMapping(value ="/delete_course/{id}", method = RequestMethod.GET)
-    public String deleteCourse(@PathVariable("id") Long id) {
+    public String deleteCourse(@PathVariable("id") Long id, @RequestParam("page") int pageNo,
+                               @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir,
+                               Model model) {
         courseService.deleteCourseById(id);
-        return "redirect:/welcome";
+        return String.format("redirect:/page/%s?sortField=%s&sortDir=%s", pageNo, sortField, sortDir);
     }
 
     @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.GET)
-    public String editCourse(@PathVariable("id")Long id, Model model) {
+    public String editCourse(@PathVariable("id")Long id, @ModelAttribute("courseForm") Course courseForm, Model model) {
         Course course = courseService.findCourseById(id);
         course.setTeacherName(course.getTeacher().getFullName());
         model.addAttribute("editForm", course);
@@ -109,7 +108,8 @@ public class AdminController {
 
     @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.POST)
     public String editCourse(@PathVariable("id")Long id, @ModelAttribute("courseForm") Course courseForm,
-                             BindingResult bindingResult, Model model) {
+                             @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField,
+                             @RequestParam("sortDir") String sortDir, BindingResult bindingResult, Model model) {
         courseValidator.validate(courseForm, bindingResult);
         if (bindingResult.hasErrors()) {
             //???
@@ -122,7 +122,7 @@ public class AdminController {
         course.setDuration(courseForm.getDuration());
         course.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
         courseService.save(course);
-        return "redirect:/welcome";
+        return String.format("redirect:/page/%s?sortField=%s&sortDir=%s", pageNo, sortField, sortDir);
     }
 
     @RequestMapping(value = "/students_list", method = RequestMethod.GET)

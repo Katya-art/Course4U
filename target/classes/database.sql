@@ -32,8 +32,7 @@ CREATE TABLE IF NOT EXISTS courses (
                                      id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                      name VARCHAR(255) NOT NULL,
                                      theme VARCHAR(255) NOT NULL,
-                                     duration VARCHAR(255) NOT NULL,
-                                     number_of_students INT NOT NULL
+                                     duration VARCHAR(255) NOT NULL
 )
     ENGINE = InnoDB;
 
@@ -128,6 +127,7 @@ INSERT INTO marks VALUES (2, 'B');
 INSERT INTO marks VALUES (3, 'C');
 INSERT INTO marks VALUES (4, 'D');
 INSERT INTO marks VALUES (5, 'E');
+INSERT INTO marks VALUES (6, '0');
 
 INSERT INTO statuses VALUES (1, 'UNLOCK');
 INSERT INTO statuses VALUES (2, 'BLOCKED');

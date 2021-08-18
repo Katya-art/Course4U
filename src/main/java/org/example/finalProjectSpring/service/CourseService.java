@@ -3,6 +3,7 @@ package org.example.finalProjectSpring.service;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.Mark;
 import org.example.finalProjectSpring.model.User;
+import org.springframework.data.domain.Page;
 
 import java.util.Map;
 import java.util.Set;
@@ -22,5 +23,5 @@ public interface CourseService {
 
     Course findCourseById(Long id);
 
-    Set<Course> findAllByStudentsMarks(Map<User, Mark> studentsMarks);
+    Page<Course> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 }

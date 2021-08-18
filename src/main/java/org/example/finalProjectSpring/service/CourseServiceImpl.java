@@ -1,15 +1,14 @@
 package org.example.finalProjectSpring.service;
 
-import org.example.finalProjectSpring.dao.CourseDao;
 import org.example.finalProjectSpring.dao.ConditionDao;
+import org.example.finalProjectSpring.dao.CourseDao;
 import org.example.finalProjectSpring.model.Course;
-import org.example.finalProjectSpring.model.Mark;
-import org.example.finalProjectSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Implementation of {@link CourseService} interface.
@@ -43,7 +42,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Set<Course> findAllByStudentsMarks(Map<User, Mark> studentsMarks) {
-        return courseDao.findAllByStudentsMarks(studentsMarks);
+    public Page<Course> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.courseDao.findAll(pageable);
     }
+
 }

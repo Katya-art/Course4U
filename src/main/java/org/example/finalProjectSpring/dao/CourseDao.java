@@ -10,5 +10,4 @@ import java.util.Set;
 
 public interface CourseDao extends JpaRepository<Course, Long> {
     Course findCourseById(Long id);
-    Set<Course> findAllByStudentsMarks(Map<User, Mark> studentsMarks);
 }

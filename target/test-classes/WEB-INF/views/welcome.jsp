@@ -26,57 +26,102 @@
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col"><spring:message code="courseName"/></th>
+            <th scope="col">
+                <a href="${contextPath}/page/${currentPage}?sortField=name&sortDir=${reverseSortDir}">
+                    <spring:message code="courseName"/></a>
+            </th>
             <th scope="col"><spring:message code="teacherName"/></th>
             <th scope="col"><spring:message code="theme"/></th>
-            <th scope="col"><spring:message code="duration"/></th>
-            <th scope="col"><spring:message code="numberOfStudents"/></th>
+            <th scope="col">
+                <a href="${contextPath}/page/${currentPage}?sortField=duration&sortDir=${reverseSortDir}">
+                    <spring:message code="duration"/></a>
+            </th>
+            <th scope="col">
+                <a href="${contextPath}/page/${currentPage}?sortField=students&sortDir=${reverseSortDir}">
+                    <spring:message code="numberOfStudents"/></a>
+            </th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${coursesList}" var="course">
             <c:if test="${course.condition.id != 3}">
-            <tr>
-                <td>${course.name}</td>
-                <td>${course.teacher.fullName}</td>
-                <td>${course.theme}</td>
-                <td>${course.duration}</td>
-                <td>${course.studentsMarks.size()}</td>
-                <sec:authorize access="hasRole('ADMIN')">
-                    <td><a href="${pageContext.request.contextPath}/edit_course/${course.id}"
-                           class="btn btn-info mt-4"><spring:message code="edit"/></a></td>
-                    <td><a href="${pageContext.request.contextPath}/delete_course/${course.id}"
-                           class="btn btn-danger mt-4"><spring:message code="delete"/></a></td>
-                </sec:authorize>
-                <sec:authorize access="hasRole('STUDENT')">
+                <tr>
+                    <td>${course.name}</td>
+                    <td>${course.teacher.fullName}</td>
+                    <td>${course.theme}</td>
+                    <td>${course.duration}</td>
+                    <td>${course.studentsMarks.size()}</td>
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <td><a href="${pageContext.request.contextPath}/edit_course/${course.id}?page=${currentPage}
+                            &sortField=${sortField}&sortDir=${sortDir}"
+                               class="btn btn-info mt-4"><spring:message code="edit"/></a></td>
+                        <td>
+                            <a href="${pageContext.request.contextPath}/delete_course/${course.id}?page=${currentPage}
+                            &sortField=${sortField}&sortDir=${sortDir}"
+                               class="btn btn-danger mt-4"><spring:message code="delete"/></a></td>
+                    </sec:authorize>
+                    <c:set var="contains" value="false"/>
+                    <c:set var="status" value="1"/>
+                    <c:if test="${pageContext.request.userPrincipal.name != null}">
+                        <c:forEach var="student" items="${course.studentsMarks.keySet()}">
+                            <c:if test="${student.username eq pageContext.request.userPrincipal.name}">
+                                <c:set var="contains" value="true"/>
+                            </c:if>
+                        </c:forEach>
+                        <c:set var="status" value="${user.status.id}"/>
+                    </c:if>
                     <c:choose>
-                        <c:when test="${user.status.id == 1}">
-                            <c:set var="contains" value="false"/>
-                            <c:forEach var="student" items="${course.studentsMarks.keySet()}">
-                                <c:if test="${student.username eq pageContext.request.userPrincipal.name}">
-                                    <c:set var="contains" value="true"/>
-                                </c:if>
-                            </c:forEach>
-                            <c:choose>
-                                <c:when test="${!contains}">
-                                    <td><a href="${pageContext.request.contextPath}/enroll_course/${course.id}"
-                                           class="btn btn-primary mt-4"><spring:message code="enroll"/></a></td>
-                                </c:when>
-                                <c:otherwise>
-                                    <td><spring:message code="alreadyEnrolled"/></td>
-                                </c:otherwise>
-                            </c:choose>
+                        <c:when test="${!contains && status == 1}">
+                            <td><a href="${pageContext.request.contextPath}/enroll_course/${course.id}?page=${currentPage}
+                            &sortField=${sortField}&sortDir=${sortDir}"
+                                   class="btn btn-primary mt-4"><spring:message code="enroll"/></a></td>
                         </c:when>
+
                         <c:otherwise>
-                            <td><spring:message code="yourAccountWasBlocked"/></td>
+                            <sec:authorize access="hasRole('STUDENT')">
+                                <td><spring:message code="alreadyEnrolled"/></td>
+                            </sec:authorize>
                         </c:otherwise>
+
                     </c:choose>
-                </sec:authorize>
-            </tr>
+                </tr>
             </c:if>
         </c:forEach>
         </tbody>
     </table>
+
+    <c:if test="${totalPages > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-2">
+                <spring:message code="totalRows"/>: ${totalItems}
+            </div>
+            <div class="col-sm-1">
+                <c:forEach var="i" begin="1" end="${totalPages}">
+                    <c:choose>
+                        <c:when test="${currentPage != i}"><a
+                                href="${contextPath}/page/${i}?sortField=${sortField}&sortDir=${sortDir}">${i}</a></c:when>
+                        <c:otherwise>${i}</c:otherwise>
+                    </c:choose>
+                </c:forEach>
+            </div>
+            <div class="col-sm-1">
+                <c:choose>
+                    <c:when test="${currentPage < totalPages}"><a
+                            href="${contextPath}/page/${currentPage + 1}?sortField=${sortField}&sortDir=${sortDir}">
+                        <spring:message code="next"/></a> </c:when>
+                    <c:otherwise><spring:message code="next"/></c:otherwise>
+                </c:choose>
+            </div>
+            <div class="col-sm-1">
+                <c:choose>
+                    <c:when test="${currentPage < totalPages}"><a
+                            href="${contextPath}/page/${totalPages}?sortField=${sortField}&sortDir=${sortDir}">
+                        <spring:message code="last"/></a></c:when>
+                    <c:otherwise><spring:message code="last"/></c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+    </c:if>
 
     <span style="float: right">
     <a href="?lang=en">en</a>
