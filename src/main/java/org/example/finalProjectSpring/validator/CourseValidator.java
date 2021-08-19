@@ -37,7 +37,7 @@ public class CourseValidator implements Validator {
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "duration", "required");
-        if (course.getDuration() <= 0) {
+        if (course.getDuration() != null && course.getDuration() <= 0) {
             errors.rejectValue("duration", "wrongDuration");
         }
 

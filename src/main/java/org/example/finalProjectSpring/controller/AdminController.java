@@ -85,6 +85,7 @@ public class AdminController {
         }
         courseForm.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
         courseForm.setCondition(conditionDao.getOne(1L));
+        courseForm.setNumberOfStudents(0);
         courseService.save(courseForm);
         return "redirect:/welcome";
     }
@@ -92,9 +93,11 @@ public class AdminController {
     @RequestMapping(value ="/delete_course/{id}", method = RequestMethod.GET)
     public String deleteCourse(@PathVariable("id") Long id, @RequestParam("page") int pageNo,
                                @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir,
+                               @RequestParam("teacherId") Long teacherId, @RequestParam("themeName") String themeName,
                                Model model) {
         courseService.deleteCourseById(id);
-        return String.format("redirect:/page/%s?sortField=%s&sortDir=%s", pageNo, sortField, sortDir);
+        return String.format("redirect:/page/%s?teacherId=%s&themeName=%s&sortField=%s&sortDir=%s", pageNo, teacherId, themeName,
+                sortField, sortDir);
     }
 
     @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.GET)
@@ -109,7 +112,8 @@ public class AdminController {
     @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.POST)
     public String editCourse(@PathVariable("id")Long id, @ModelAttribute("courseForm") Course courseForm,
                              @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField,
-                             @RequestParam("sortDir") String sortDir, BindingResult bindingResult, Model model) {
+                             @RequestParam("sortDir") String sortDir, @RequestParam("teacherId") Long teacherId,
+                             @RequestParam("themeName") String themeName, BindingResult bindingResult, Model model) {
         courseValidator.validate(courseForm, bindingResult);
         if (bindingResult.hasErrors()) {
             //???
@@ -122,7 +126,8 @@ public class AdminController {
         course.setDuration(courseForm.getDuration());
         course.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
         courseService.save(course);
-        return String.format("redirect:/page/%s?sortField=%s&sortDir=%s", pageNo, sortField, sortDir);
+        return String.format("redirect:/page/%s?teacherId=%s&themeName=%s&sortField=%s&sortDir=%s", pageNo, teacherId, themeName,
+                sortField, sortDir);
     }
 
     @RequestMapping(value = "/students_list", method = RequestMethod.GET)

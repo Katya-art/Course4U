@@ -42,7 +42,8 @@ public class StudentController {
 
     @RequestMapping(value ="/enroll_course/{id}", method = RequestMethod.GET)
     public String enrollCourse(@PathVariable("id") Long id, @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField,
-                               @RequestParam("sortDir") String sortDir, Model model) {
+                               @RequestParam("sortDir") String sortDir, @RequestParam("teacherId") Long teacherId,
+                               @RequestParam("themeName") String themeName) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
         if (principal instanceof UserDetails) {
@@ -54,12 +55,14 @@ public class StudentController {
         Map<User, Mark> studentsMarks = course.getStudentsMarks();
         studentsMarks.put(userService.findByUsername(username), markDao.getOne(6L));
         course.setStudentsMarks(studentsMarks);
+        course.setNumberOfStudents(course.getStudentsMarks().size());
         courseService.save(course);
-        return String.format("redirect:/page/%s?sortField=%s&sortDir=%s", pageNo, sortField, sortDir);
+        return String.format("redirect:/page/%s?teacherId=%s&themeName=%s&sortField=%s&sortDir=%s", pageNo, teacherId,
+                themeName, sortField, sortDir);
     }
 
-    @RequestMapping(value = "/my_courses/{status}", method = RequestMethod.GET)
-    public String studentCourses(@PathVariable("status") String status, Model model) {
+    @RequestMapping(value = "/my_courses/{condition}", method = RequestMethod.GET)
+    public String studentCourses(@PathVariable("condition") String condition, Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
         if (principal instanceof UserDetails) {
@@ -71,13 +74,13 @@ public class StudentController {
         Set<Course> enrolledCourses = user.getEnrolledCourses();
         Set<Course> courses = new HashSet<>();
         Long id = null;
-        if (status.equals("not_started")) {
+        if (condition.equals("not_started")) {
             id = 1L;
         }
-        if (status.equals("in_progress")) {
+        if (condition.equals("in_progress")) {
             id = 2L;
         }
-        if (status.equals("completed")) {
+        if (condition.equals("completed")) {
             id = 3L;
         }
         for (Course course : enrolledCourses) {
@@ -87,7 +90,7 @@ public class StudentController {
         }
         model.addAttribute("courses", courses);
         model.addAttribute("user", user);
-        model.addAttribute("status", status);
+        model.addAttribute("condition", condition);
         return "student_courses";
     }
 }

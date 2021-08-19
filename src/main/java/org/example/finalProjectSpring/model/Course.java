@@ -28,6 +28,9 @@ public class Course {
     @Column(name = "duration")
     private Long duration;
 
+    @Column(name = "number_of_students")
+    private int numberOfStudents;
+
     @Transient
     private String teacherName;
 
@@ -82,6 +85,14 @@ public class Course {
 
     public void setDuration(Long duration) {
         this.duration = duration;
+    }
+
+    public int getNumberOfStudents() {
+        return numberOfStudents;
+    }
+
+    public void setNumberOfStudents(int numberOfStudents) {
+        this.numberOfStudents = numberOfStudents;
     }
 
     public String getTeacherName() {

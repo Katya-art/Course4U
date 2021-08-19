@@ -3,12 +3,15 @@ package org.example.finalProjectSpring.service;
 import org.example.finalProjectSpring.dao.ConditionDao;
 import org.example.finalProjectSpring.dao.CourseDao;
 import org.example.finalProjectSpring.model.Course;
+import org.example.finalProjectSpring.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 /**
  * Implementation of {@link CourseService} interface.
@@ -47,6 +50,30 @@ public class CourseServiceImpl implements CourseService {
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         return this.courseDao.findAll(pageable);
+    }
+
+    @Override
+    public Page<Course> findPaginatedByTeacher(int pageNo, int pageSize, String sortField, String sortDirection, User teacher) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.courseDao.findAllByTeacher(teacher, pageable);
+    }
+
+    @Override
+    public Page<Course> findPaginatedByTheme(int pageNo, int pageSize, String sortField, String sortDirection, String theme) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.courseDao.findAllByTheme(theme, pageable);
+    }
+
+    @Override
+    public Page<Course> findPaginatedByTeacherAndTheme(int pageNo, int pageSize, String sortField, String sortDirection, User teacher, String theme) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.courseDao.findAllByTeacherAndTheme(teacher, theme, pageable);
     }
 
 }

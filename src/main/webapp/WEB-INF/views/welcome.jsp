@@ -22,22 +22,21 @@
 <body>
 <jsp:include page="elements/navbar.jsp"/>
 <div class="container">
-
     <table class="table">
         <thead class="thead-dark">
         <tr>
             <th scope="col">
-                <a href="${contextPath}/page/${currentPage}?sortField=name&sortDir=${reverseSortDir}">
+                <a href="${contextPath}/page/${currentPage}?teacherId=${teacherId}&themeName=${themeName}&sortField=name&sortDir=${reverseSortDir}">
                     <spring:message code="courseName"/></a>
             </th>
             <th scope="col"><spring:message code="teacherName"/></th>
             <th scope="col"><spring:message code="theme"/></th>
             <th scope="col">
-                <a href="${contextPath}/page/${currentPage}?sortField=duration&sortDir=${reverseSortDir}">
+                <a href="${contextPath}/page/${currentPage}?teacherId=${teacherId}&themeName=${themeName}&sortField=duration&sortDir=${reverseSortDir}">
                     <spring:message code="duration"/></a>
             </th>
             <th scope="col">
-                <a href="${contextPath}/page/${currentPage}?sortField=students&sortDir=${reverseSortDir}">
+                <a href="${contextPath}/page/${currentPage}?teacherId=${teacherId}&themeName=${themeName}&sortField=numberOfStudents&sortDir=${reverseSortDir}">
                     <spring:message code="numberOfStudents"/></a>
             </th>
         </tr>
@@ -47,17 +46,17 @@
             <c:if test="${course.condition.id != 3}">
                 <tr>
                     <td>${course.name}</td>
-                    <td>${course.teacher.fullName}</td>
-                    <td>${course.theme}</td>
+                    <td><a href="${contextPath}/page/1?teacherId=${course.teacher.id}&themeName=${themeName}
+                    &sortField=${sortField}&sortDir=${sortDir}">${course.teacher.fullName}</a></td>
+                    <td><a href="${contextPath}/page/1?teacherId=${teacherId}&themeName=${course.theme}
+                    &sortField=${sortField}&sortDir=${sortDir}">${course.theme}</a></td>
                     <td>${course.duration}</td>
-                    <td>${course.studentsMarks.size()}</td>
+                    <td>${course.numberOfStudents}</td>
                     <sec:authorize access="hasRole('ADMIN')">
-                        <td><a href="${pageContext.request.contextPath}/edit_course/${course.id}?page=${currentPage}
-                            &sortField=${sortField}&sortDir=${sortDir}"
+                        <td><a href="${pageContext.request.contextPath}/edit_course/${course.id}?page=${currentPage}&teacherId=${teacherId}&themeName=${themeName}&sortField=${sortField}&sortDir=${sortDir}"
                                class="btn btn-info mt-4"><spring:message code="edit"/></a></td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/delete_course/${course.id}?page=${currentPage}
-                            &sortField=${sortField}&sortDir=${sortDir}"
+                            <a href="${pageContext.request.contextPath}/delete_course/${course.id}?page=${currentPage}&teacherId=${teacherId}&themeName=${themeName}&sortField=${sortField}&sortDir=${sortDir}"
                                class="btn btn-danger mt-4"><spring:message code="delete"/></a></td>
                     </sec:authorize>
                     <c:set var="contains" value="false"/>
@@ -72,17 +71,17 @@
                     </c:if>
                     <c:choose>
                         <c:when test="${!contains && status == 1}">
-                            <td><a href="${pageContext.request.contextPath}/enroll_course/${course.id}?page=${currentPage}
-                            &sortField=${sortField}&sortDir=${sortDir}"
+                            <td><a href="${pageContext.request.contextPath}/enroll_course/${course.id}?page=${currentPage}&teacherId=${teacherId}&themeName=${themeName}&sortField=${sortField}&sortDir=${sortDir}"
                                    class="btn btn-primary mt-4"><spring:message code="enroll"/></a></td>
                         </c:when>
-
+                        <c:when test="${status == 2}">
+                            <td><spring:message code="yourAccountWasBlocked"/></td>
+                        </c:when>
                         <c:otherwise>
                             <sec:authorize access="hasRole('STUDENT')">
                                 <td><spring:message code="alreadyEnrolled"/></td>
                             </sec:authorize>
                         </c:otherwise>
-
                     </c:choose>
                 </tr>
             </c:if>
@@ -92,14 +91,14 @@
 
     <c:if test="${totalPages > 1}">
         <div class="row col-sm-10">
-            <div class="col-sm-2">
+            <!--div class="col-sm-2">
                 <spring:message code="totalRows"/>: ${totalItems}
-            </div>
+            </div-->
             <div class="col-sm-1">
                 <c:forEach var="i" begin="1" end="${totalPages}">
                     <c:choose>
                         <c:when test="${currentPage != i}"><a
-                                href="${contextPath}/page/${i}?sortField=${sortField}&sortDir=${sortDir}">${i}</a></c:when>
+                                href="${contextPath}/page/${i}?teacherId=${teacherId}&themeName=${themeName}&sortField=${sortField}&sortDir=${sortDir}">${i}</a></c:when>
                         <c:otherwise>${i}</c:otherwise>
                     </c:choose>
                 </c:forEach>
@@ -107,7 +106,7 @@
             <div class="col-sm-1">
                 <c:choose>
                     <c:when test="${currentPage < totalPages}"><a
-                            href="${contextPath}/page/${currentPage + 1}?sortField=${sortField}&sortDir=${sortDir}">
+                            href="${contextPath}/page/${currentPage + 1}?teacherId=${teacherId}&themeName=${themeName}&sortField=${sortField}&sortDir=${sortDir}">
                         <spring:message code="next"/></a> </c:when>
                     <c:otherwise><spring:message code="next"/></c:otherwise>
                 </c:choose>
@@ -115,7 +114,7 @@
             <div class="col-sm-1">
                 <c:choose>
                     <c:when test="${currentPage < totalPages}"><a
-                            href="${contextPath}/page/${totalPages}?sortField=${sortField}&sortDir=${sortDir}">
+                            href="${contextPath}/page/${totalPages}?teacherId=${teacherId}&themeName=${themeName}&sortField=${sortField}&sortDir=${sortDir}">
                         <spring:message code="last"/></a></c:when>
                     <c:otherwise><spring:message code="last"/></c:otherwise>
                 </c:choose>

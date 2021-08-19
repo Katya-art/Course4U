@@ -85,7 +85,7 @@ public class MainController {
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
         System.out.println("model: " + model);
-        return findPaginated(1, "name", "asc", model);
+        return findPaginated(1, "name", "asc", 0L, "any", model);
     }
 
     @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
@@ -97,10 +97,28 @@ public class MainController {
 
     @RequestMapping(value = "/page/{pageNo}", method = RequestMethod.GET)
     public String findPaginated(@PathVariable("pageNo") int pageNo, @RequestParam("sortField") String sortField,
-                                @RequestParam("sortDir") String sortDir, Model model) {
+                                @RequestParam("sortDir") String sortDir, @RequestParam("teacherId") Long teacherId,
+                                @RequestParam("themeName") String themeName, Model model) {
         int pageSize = 10;
-        System.out.println("pageNo:" + pageNo + "\npageSize: " + pageSize + "\nsortField: " + sortField + "\nsortDir: " + sortDir);
-        Page<Course> page = courseService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        Page<Course> page = null;
+        if (teacherId != 0 && themeName.replaceAll(" ", "").equals("any")) {
+            User teacher = userService.findUserById(teacherId);
+            page = courseService.findPaginatedByTeacher(pageNo, pageSize, sortField, sortDir, teacher);
+        }
+
+        if (!themeName.replaceAll(" ", "").equals("any") && teacherId == 0) {
+            page = courseService.findPaginatedByTheme(pageNo, pageSize, sortField, sortDir, themeName);
+        }
+
+        if (teacherId != 0 && !themeName.replaceAll(" ", "").equals("any")) {
+            User teacher = userService.findUserById(teacherId);
+            page = courseService.findPaginatedByTeacherAndTheme(pageNo, pageSize, sortField, sortDir,
+                    teacher, themeName);
+        }
+        if (teacherId == 0 && themeName.replaceAll(" ", "").equals("any")) {
+            page = courseService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        }
+
         List<Course> courseList = page.getContent();
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -119,6 +137,8 @@ public class MainController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("teacherId", teacherId);
+        model.addAttribute("themeName", themeName);
 
         model.addAttribute("coursesList", courseList);
         return "welcome";
