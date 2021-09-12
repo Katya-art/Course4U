@@ -18,9 +18,9 @@
     <!--to show icons-->
     <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"-->
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <jsp:include page="elements/navbar.jsp"/>
 </head>
 <body>
-<jsp:include page="elements/navbar.jsp"/>
 <div class="container">
     <table class="table">
         <thead class="thead-dark">
@@ -123,9 +123,9 @@
     </c:if>
 
     <span style="float: right">
-    <a href="?lang=en">en</a>
+    <a href="?locale=en">en</a>
     |
-    <a href="?lang=ua">ua</a>
+    <a href="?locale=ua">ua</a>
 </span>
 
 </div>

@@ -21,7 +21,7 @@
 </head>
 <body>
 <jsp:include page="elements/navbar.jsp"/>
-<div class="container">
+<div class="container" id="students_list">
     <table class="table">
         <tbody>
         <c:forEach items="${studentsList}" var="student">
@@ -43,9 +43,9 @@
     </table>
 
     <span style="float: right">
-    <a href="?lang=en">en</a>
+    <a href="?locale=en">en</a>
     |
-    <a href="?lang=ua">ua</a>
+    <a href="?locale=ua">ua</a>
 </span>
 
 </div>

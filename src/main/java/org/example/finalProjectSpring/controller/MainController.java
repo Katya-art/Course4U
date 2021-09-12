@@ -9,6 +9,7 @@ import org.example.finalProjectSpring.service.SecurityService;
 import org.example.finalProjectSpring.service.UserService;
 import org.example.finalProjectSpring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Controller for all user's pages.
@@ -73,18 +76,22 @@ public class MainController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
+        ResourceBundle messages = ResourceBundle.getBundle("messages", LocaleContextHolder.getLocale());
         if (error != null) {
-            model.addAttribute("error", "Username or password is incorrect.");
+            model.addAttribute("error",
+                    new String(messages.getString("incorrect").getBytes(StandardCharsets.ISO_8859_1),
+                            StandardCharsets.UTF_8));
         }
         if (logout != null) {
-            model.addAttribute("message", "Logged out successfully.");
+            model.addAttribute("message",
+                    new String(messages.getString("loggedOut").getBytes(StandardCharsets.ISO_8859_1),
+                    StandardCharsets.UTF_8));
         }
         return "login";
     }
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
-        System.out.println("model: " + model);
         return findPaginated(1, "name", "asc", 0L, "any", model);
     }
 
@@ -124,7 +131,7 @@ public class MainController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }

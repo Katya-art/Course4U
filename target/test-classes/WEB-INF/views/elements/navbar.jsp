@@ -25,7 +25,7 @@
                 </sec:authorize>
             </ul>
         </div>
-        <div class="navbar-header navbar-right">
+        <div class="navbar-header navbar-right" id="navbarSupportedContent">
             <sec:authorize access="isAnonymous()">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/login">
                     <spring:message code="login"/></a>
@@ -33,14 +33,11 @@
                     <spring:message code="register"/></a>
             </sec:authorize>
             <sec:authorize access="isAuthenticated()">
-
                 <form id="logoutForm" method="POST" action="${pageContext.request.contextPath}/logout">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
                 <c:if test="${pageContext.request.userPrincipal.name != null}">
-                    <a class="navbar-brand"
-                       href="${pageContext.request.contextPath}/user/${pageContext.request.userPrincipal.name}">
-                            ${pageContext.request.userPrincipal.name}</a>
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}/user/${pageContext.request.userPrincipal.name}">${pageContext.request.userPrincipal.name}</a>
                 </c:if>
                 <a class="navbar-brand" onclick="document.forms['logoutForm'].submit()">
                     <spring:message code="logout"/></a>

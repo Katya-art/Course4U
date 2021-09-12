@@ -43,9 +43,9 @@
     </table>
 
     <span style="float: right">
-    <a href="?lang=en">en</a>
+    <a href="?locale=en">en</a>
     |
-    <a href="?lang=ua">ua</a>
+    <a href="?locale=ua">ua</a>
 </span>
 
 </div>

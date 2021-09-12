@@ -38,9 +38,16 @@
                     <td>${student.key.fullName}</td>
                     <td>
                         <select id="marks" name="marks">
-                            <option value="${student.value.id}">${student.value.name}</option>
                             <c:forEach items="${marks}" var="mark">
-                                <option value="${mark.id}">${mark.name}</option>
+                                <c:choose>
+                                    <c:when test="${mark.id == student.value.id}">
+                                        <option value="${mark.id}"
+                                                selected="selected">${mark.name}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${mark.id}">${mark.name}</option>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:forEach>
                         </select>
                     </td>

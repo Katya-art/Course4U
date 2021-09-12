@@ -7,11 +7,6 @@
 
   <display-name>Final project</display-name>
 
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/appconfig-root.xml</param-value>
-  </context-param>
-
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS courses (
                                      id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                      name VARCHAR(255) NOT NULL,
                                      theme VARCHAR(255) NOT NULL,
-                                     duration VARCHAR(255) NOT NULL
+                                     duration VARCHAR(255) NOT NULL,
+                                     number_of_students INT NOT NULL
 )
     ENGINE = InnoDB;
 
