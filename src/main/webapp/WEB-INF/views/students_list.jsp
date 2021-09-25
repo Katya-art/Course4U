@@ -8,21 +8,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
 
     <title>List of students</title>
-    <!--to show icons-->
-    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"-->
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <jsp:include page="elements/navbar.jsp"/>
+
+    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
-<jsp:include page="elements/navbar.jsp"/>
-<div class="container" id="students_list">
-    <table class="table">
+<div class="container">
+    <table class="table" id="students_list">
         <tbody>
         <c:forEach items="${studentsList}" var="student">
             <tr>
@@ -43,14 +42,13 @@
     </table>
 
     <span style="float: right">
-    <a href="?locale=en">en</a>
-    |
-    <a href="?locale=ua">ua</a>
-</span>
+        <a href="?locale=en">en</a>
+        |
+        <a href="?locale=ua">ua</a>
+    </span>
 
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>
-

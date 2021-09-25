@@ -78,14 +78,10 @@ public class MainController {
     public String login(Model model, String error, String logout) {
         ResourceBundle messages = ResourceBundle.getBundle("messages", LocaleContextHolder.getLocale());
         if (error != null) {
-            model.addAttribute("error",
-                    new String(messages.getString("incorrect").getBytes(StandardCharsets.ISO_8859_1),
-                            StandardCharsets.UTF_8));
+            model.addAttribute("error", messages.getString("incorrect"));
         }
         if (logout != null) {
-            model.addAttribute("message",
-                    new String(messages.getString("loggedOut").getBytes(StandardCharsets.ISO_8859_1),
-                    StandardCharsets.UTF_8));
+            model.addAttribute("error", messages.getString("loggedOut"));
         }
         return "login";
     }
@@ -98,6 +94,9 @@ public class MainController {
     @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
     public String userPage(@PathVariable("username") String username, Model model) {
         User user = userService.findByUsername(username);
+        if (user == null) {
+            return "redirect:/error";
+        }
         model.addAttribute("user", user);
         return "user";
     }

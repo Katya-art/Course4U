@@ -1,13 +1,12 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.dao.UserDao;
-import org.example.finalProjectSpring.model.User;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.emptyString;
@@ -25,14 +24,6 @@ public class MainControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void contextLoads() throws Exception {
-        this.mockMvc.perform(get("/"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(emptyString()));
-    }
-
-    @Test
     public void correctLoginTest() throws Exception {
         this.mockMvc.perform(formLogin().user("KaterynaKravchenko").password("12345678"))
                 .andDo(print())
@@ -41,9 +32,32 @@ public class MainControllerTest {
     }
 
     @Test
-    public void badCredentials() throws Exception {
+    public void incorrectLoginTest() throws Exception {
         this.mockMvc.perform(post("/login").param("user", "Alfred"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void contextLoads() throws Exception {
+        this.mockMvc.perform(get("/"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("welcome"))
+                .andExpect(forwardedUrl("/WEB-INF/views/welcome.jsp"));
+    }
+
+    @Test
+    public void userPageTest() throws Exception {
+        this.mockMvc.perform(get("/user/KaterynaKravchenko"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void userPageTestFailed() throws Exception {
+        this.mockMvc.perform(get("/user/test"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
     }
 }

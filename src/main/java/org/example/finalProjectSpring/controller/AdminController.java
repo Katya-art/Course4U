@@ -79,7 +79,7 @@ public class AdminController {
     public String addCourse(@ModelAttribute("courseForm") Course courseForm, BindingResult bindingResult, Model model) {
         courseValidator.validate(courseForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            //???
+            model.addAttribute("courseForm", courseForm);
             model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
             return "add_course";
         }
@@ -93,8 +93,7 @@ public class AdminController {
     @RequestMapping(value ="/delete_course/{id}", method = RequestMethod.GET)
     public String deleteCourse(@PathVariable("id") Long id, @RequestParam("page") int pageNo,
                                @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir,
-                               @RequestParam("teacherId") Long teacherId, @RequestParam("themeName") String themeName,
-                               Model model) {
+                               @RequestParam("teacherId") Long teacherId, @RequestParam("themeName") String themeName) {
         courseService.deleteCourseById(id);
         return String.format("redirect:/page/%s?teacherId=%s&themeName=%s&sortField=%s&sortDir=%s", pageNo, teacherId, themeName,
                 sortField, sortDir);
@@ -116,7 +115,6 @@ public class AdminController {
                              @RequestParam("themeName") String themeName, BindingResult bindingResult, Model model) {
         courseValidator.validate(courseForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            //???
             model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
             return "add_course";
         }

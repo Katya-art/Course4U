@@ -24,6 +24,8 @@ public interface CourseService {
 
     Course findCourseById(Long id);
 
+    Course findCourseByName(String name);
+
     Page<Course> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 
     Page<Course> findPaginatedByTeacher(int pageNo, int pageSize, String sortField, String sortDirection, User teacher);

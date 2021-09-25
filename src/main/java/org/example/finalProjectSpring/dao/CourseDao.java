@@ -13,6 +13,8 @@ import java.util.Set;
 
 public interface CourseDao extends JpaRepository<Course, Long> {
 
+    Course findByName(String name);
+
     Course findCourseById(Long id);
 
     Page<Course> findAllByTeacher(User teacher, Pageable pageable);

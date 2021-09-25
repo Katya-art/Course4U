@@ -26,9 +26,6 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private CourseDao courseDao;
 
-    @Autowired
-    private ConditionDao conditionDao;
-
     @Override
     public void save(Course course) {
         courseDao.save(course);
@@ -42,6 +39,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course findCourseById(Long id) {
         return courseDao.findCourseById(id);
+    }
+
+    @Override
+    public Course findCourseByName(String name) {
+        return courseDao.findByName(name);
     }
 
     @Override

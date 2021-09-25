@@ -1,33 +1,97 @@
 package org.example.finalProjectSpring.controller;
 
-import org.junit.jupiter.api.Test;
+import org.example.finalProjectSpring.dao.RoleDao;
+import org.example.finalProjectSpring.dao.StatusDao;
+import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.service.UserService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
+import java.util.Arrays;
 
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithUserDetails("KaterynaKravchenko")
 public class AdminControllerTest {
+
+    @MockBean
+    private UserService userService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @MockBean
+    private RoleDao roleDao;
+
+    @Autowired
+    private StatusDao statusDao;
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
+    @WithUserDetails("KaterynaKravchenko")
     public void studentsListTest() throws Exception {
-        this.mockMvc.perform(get("/students_list"))
-                .andDo(print())
-                .andExpect(authenticated())
-                .andExpect(xpath("//*[@id=\"students_list\"]").nodeCount(7));
+        User user1 = new User();
+
+        user1.setId(1L);
+        user1.setFullName("Test User1");
+        user1.setUsername("TestUser1");
+        user1.setEmail("test.user1@gmail.com");
+        user1.setPassword(bCryptPasswordEncoder.encode("testUser1"));
+        user1.setRole(roleDao.getOne(1L));
+        user1.setStatus(statusDao.getOne(1L));
+
+        User user2 = new User();
+
+        user2.setId(2L);
+        user2.setFullName("Test User2");
+        user2.setUsername("TestUser2");
+        user2.setEmail("test.user2@gmail.com");
+        user2.setPassword(bCryptPasswordEncoder.encode("testUser2"));
+        user2.setRole(roleDao.getOne(1L));
+        user2.setStatus(statusDao.getOne(1L));
+
+        when(userService.findAllByRole(roleDao.getOne(1L))).thenReturn(Arrays.asList(user1, user2));
+
+        mockMvc.perform(get("/students_list"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("students_list"))
+                .andExpect(forwardedUrl("/WEB-INF/views/students_list.jsp"))
+                .andExpect(model().attribute("studentsList", hasSize(2)))
+                .andExpect(model().attribute("studentsList", hasItem(
+                        allOf(
+                                hasProperty("id", is(1L)),
+                                hasProperty("fullName", is("Test User1")),
+                                hasProperty("username", is("TestUser1")),
+                                hasProperty("email", is("test.user1@gmail.com"))
+                        )
+                )))
+                .andExpect(model().attribute("studentsList", hasItem(
+                        allOf(
+                                hasProperty("id", is(2L)),
+                                hasProperty("fullName", is("Test User2")),
+                                hasProperty("username", is("TestUser2")),
+                                hasProperty("email", is("test.user2@gmail.com"))
+                        )
+                )));
+
+        verify(userService, times(1)).findAllByRole(roleDao.getOne(1L));
+        verifyNoMoreInteractions(userService);
     }
 
 }
