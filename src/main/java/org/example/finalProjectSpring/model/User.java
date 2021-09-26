@@ -1,6 +1,7 @@
 package org.example.finalProjectSpring.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,11 +41,11 @@ public class User {
 
     //only for users with role TEACHER
     @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER)
-    private Set<Course> assignedCourses;
+    private List<Course> assignedCourses;
 
     //only for users with role STUDENT
     @ManyToMany(mappedBy = "students", fetch = FetchType.EAGER)
-    private Set<Course> enrolledCourses;
+    private List<Course> enrolledCourses;
 
     @ManyToOne
     @JoinTable(name = "student_status", joinColumns = @JoinColumn(name = "student_id"),
@@ -107,19 +108,19 @@ public class User {
         this.role = role;
     }
 
-    public Set<Course> getAssignedCourses() {
+    public List<Course> getAssignedCourses() {
         return assignedCourses;
     }
 
-    public void setAssignedCourses(Set<Course> courses) {
+    public void setAssignedCourses(List<Course> courses) {
         this.assignedCourses = courses;
     }
 
-    public Set<Course> getEnrolledCourses() {
+    public List<Course> getEnrolledCourses() {
         return enrolledCourses;
     }
 
-    public void setEnrolledCourses(Set<Course> enrolledCourses) {
+    public void setEnrolledCourses(List<Course> enrolledCourses) {
         this.enrolledCourses = enrolledCourses;
     }
 

@@ -15,7 +15,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
@@ -81,7 +83,7 @@ public class StudentControllerTest {
         course3.setTeacher(userService.findByUsername("ElaReader"));
         course3.setCondition(conditionDao.getById(3L));
 
-        Set<Course> courses = new HashSet<>();
+        List<Course> courses = new ArrayList<>();
         courses.add(course1);
         courses.add(course2);
         courses.add(course3);

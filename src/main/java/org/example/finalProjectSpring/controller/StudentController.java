@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Controller for student's pages.
@@ -71,8 +68,8 @@ public class StudentController {
             username = principal.toString();
         }
         User user = userService.findByUsername(username);
-        Set<Course> enrolledCourses = user.getEnrolledCourses();
-        Set<Course> courses = new HashSet<>();
+        List<Course> enrolledCourses = user.getEnrolledCourses();
+        List<Course> courses = new ArrayList<>();
         Long id = null;
         if (condition.equals("not_started")) {
             id = 1L;

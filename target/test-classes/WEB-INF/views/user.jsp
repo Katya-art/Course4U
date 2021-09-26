@@ -26,7 +26,7 @@
     <h4 style="text-align: center">${user.role.name.replace("ROLE_", "")}</h4>
     <sec:authorize access="hasRole('STUDENT')">
         <c:if test="${user.status.id == 2}">
-            <h5 style="text-align: center"><spring:message code="yourAccountWasBlocked"/></h5>
+            <h5 style="text-align: center; color: #ac2925"><spring:message code="yourAccountWasBlocked"/></h5>
         </c:if>
     </sec:authorize>
     <table class="table">

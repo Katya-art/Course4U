@@ -1,6 +1,5 @@
 package org.example.finalProjectSpring.service;
 
-import org.example.finalProjectSpring.dao.ConditionDao;
 import org.example.finalProjectSpring.dao.CourseDao;
 import org.example.finalProjectSpring.model.Course;
 import org.example.finalProjectSpring.model.User;
@@ -10,8 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 /**
  * Implementation of {@link CourseService} interface.
@@ -39,11 +36,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course findCourseById(Long id) {
         return courseDao.findCourseById(id);
-    }
-
-    @Override
-    public Course findCourseByName(String name) {
-        return courseDao.findByName(name);
     }
 
     @Override

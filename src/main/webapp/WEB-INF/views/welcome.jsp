@@ -123,9 +123,9 @@
     </c:if>
 
     <span style="float: right">
-    <a href="?locale=en">en</a>
+    <a href="?teacherId=${teacherId}&themeName=${themeName}&sortField=${sortField}&sortDir=${sortDir}&locale=en">en</a>
     |
-    <a href="?locale=ua">ua</a>
+    <a href="?teacherId=${teacherId}&themeName=${themeName}&sortField=${sortField}&sortDir=${sortDir}&locale=ua">ua</a>
 </span>
 
 </div>
