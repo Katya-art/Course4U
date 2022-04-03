@@ -1,7 +1,6 @@
 package org.example.finalProjectSpring.model;
 
-import javax.persistence.*;
-import java.util.Set;
+import org.example.finalProjectSpring.database.entity.User;
 
 /**
  * Simple JavaBean object that represents role of {@link User}.
@@ -10,54 +9,8 @@ import java.util.Set;
  * @version 1.0
  */
 
-@Entity
-@Table(name = "roles")
-public class Role {
+public enum Role {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER
 
-    @Column(name = "name")
-    private String name;
-
-    @Transient
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
-    private Set<User> users;
-
-    public Role() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", users=" + users +
-                '}';
-    }
 }

@@ -1,8 +1,8 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.dao.ConditionDao;
-import org.example.finalProjectSpring.model.Course;
-import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.model.Condition;
+import org.example.finalProjectSpring.database.entity.Course;
+import org.example.finalProjectSpring.database.entity.User;
 import org.example.finalProjectSpring.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -11,14 +11,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -37,9 +34,6 @@ public class StudentControllerTest {
     private UserService userService;
 
     @Autowired
-    private ConditionDao conditionDao;
-
-    @Autowired
     private MockMvc mockMvc;
 
     @Test
@@ -55,33 +49,33 @@ public class StudentControllerTest {
     public void studentCoursesTest() throws Exception {
         Course course1 = new Course();
 
-        course1.setId(1L);
+        course1.setId("1");
         course1.setName("Test Course1");
         course1.setTheme("Test");
         course1.setDuration(4L);
         course1.setNumberOfStudents(1);
         course1.setTeacher(userService.findByUsername("ElaReader"));
-        course1.setCondition(conditionDao.getById(1L));
+        course1.setCondition(Condition.NOT_STARTED);
 
         Course course2 = new Course();
 
-        course2.setId(2L);
+        course2.setId("2");
         course2.setName("Test Course2");
         course2.setTheme("Test");
         course2.setDuration(5L);
         course2.setNumberOfStudents(1);
         course2.setTeacher(userService.findByUsername("ElaReader"));
-        course2.setCondition(conditionDao.getById(2L));
+        course2.setCondition(Condition.IN_PROGRESS);
 
         Course course3 = new Course();
 
-        course3.setId(3L);
+        course3.setId("3");
         course3.setName("Test Course3");
         course3.setTheme("Test");
         course3.setDuration(2L);
         course3.setNumberOfStudents(1);
         course3.setTeacher(userService.findByUsername("ElaReader"));
-        course3.setCondition(conditionDao.getById(3L));
+        course3.setCondition(Condition.COMPLETED);
 
         List<Course> courses = new ArrayList<>();
         courses.add(course1);
@@ -89,7 +83,7 @@ public class StudentControllerTest {
         courses.add(course3);
 
         User student = new User();
-        student.setEnrolledCourses(courses);
+        //student.setEnrolledCourses(courses);
 
         when(userService.findByUsername("AyvaBowers")).thenReturn(student);
 

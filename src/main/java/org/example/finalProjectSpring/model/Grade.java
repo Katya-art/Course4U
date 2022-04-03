@@ -1,17 +1,16 @@
 package org.example.finalProjectSpring.model;
 
 import javax.persistence.*;
-import java.util.Set;
 
 /**
- * Simple JavaBean object that represents student's status.
+ * Simple JavaBean object that represents student's mark.
  *
  * @author Kateryna Kravchenko
  * @version 1.0
  */
 
-public enum Status {
+public enum Grade {
 
-    UNLOCK, BLOCKED
+    A, B, C, D, E, Fx
 
 }

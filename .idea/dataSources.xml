@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="final_project_spring@localhost" uuid="01f8e179-9c40-4492-bc59-bf6ff073ede4">
-      <driver-ref>mysql.8</driver-ref>
+    <data-source source="LOCAL" name="course_for_you@localhost" uuid="d85ed1d5-1f29-4f34-818f-91d19fb4f2c3">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/final_project_spring</jdbc-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/course_for_you</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

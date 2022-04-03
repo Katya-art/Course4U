@@ -1,12 +1,10 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.dao.MarkDao;
-import org.example.finalProjectSpring.dao.ConditionDao;
-import org.example.finalProjectSpring.model.Course;
-import org.example.finalProjectSpring.model.Mark;
-import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.model.Condition;
+import org.example.finalProjectSpring.database.entity.Course;
+import org.example.finalProjectSpring.model.Grade;
+import org.example.finalProjectSpring.database.entity.User;
 import org.example.finalProjectSpring.service.CourseService;
-import org.example.finalProjectSpring.service.MarkService;
 import org.example.finalProjectSpring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,9 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Controller for teacher's pages.
@@ -34,15 +29,6 @@ public class TeacherController {
     @Autowired
     CourseService courseService;
 
-    @Autowired
-    MarkService markService;
-
-    @Autowired
-    ConditionDao conditionDao;
-
-    @Autowired
-    MarkDao markDao;
-
     @RequestMapping(value = "/assigned_courses", method = RequestMethod.GET)
     public String teacherCourses(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -58,39 +44,39 @@ public class TeacherController {
     }
 
     @RequestMapping(value ="/start_course/{id}", method = RequestMethod.GET)
-    public String startCourse(@PathVariable("id") Long id) {
+    public String startCourse(@PathVariable("id") String id) {
         Course course = courseService.findCourseById(id);
-        course.setCondition(conditionDao.getOne(2L));
+        course.setCondition(Condition.IN_PROGRESS);
         courseService.save(course);
         return "redirect:/assigned_courses";
     }
 
     @RequestMapping(value ="/grade_journal/{id}", method = RequestMethod.GET)
-    public String gradeJournal(@PathVariable("id") Long id, Model model) {
+    public String gradeJournal(@PathVariable("id") String id, Model model) {
         Course course = courseService.findCourseById(id);
         model.addAttribute("course", course);
-        model.addAttribute("marks", markDao.findAll());
+        model.addAttribute("marks", Grade.values());
         return "grade_journal";
     }
 
     @RequestMapping(value ="/save_journal/{id}", method = RequestMethod.POST)
-    public String saveJournal(@PathVariable("id") Long id,
+    public String saveJournal(@PathVariable("id") String id,
                               @RequestParam(value = "marks", required = false) Long[] marks,
                               @RequestParam(value = "students", required = false) Long[] students) {
         Course course = courseService.findCourseById(id);
-        Map<User, Mark> userMarkMap = new HashMap<>();
-        for (int i = 0; i < marks.length; i++) {
-            userMarkMap.put(userService.findUserById(students[i]), markService.findMarkById(marks[i]));
-        }
-        course.setStudentsMarks(userMarkMap);
+//        Map<User, Mark> userMarkMap = new HashMap<>();
+//        for (int i = 0; i < marks.length; i++) {
+//            userMarkMap.put(userService.findUserById(students[i]), markService.findMarkById(marks[i]));
+//        }
+        //course.setStudentsMarks(userMarkMap);
         courseService.save(course);
         return "redirect:/assigned_courses";
     }
 
     @RequestMapping(value ="/finish_course/{id}", method = RequestMethod.GET)
-    public String finishCourse(@PathVariable("id") Long id) {
+    public String finishCourse(@PathVariable("id") String id) {
         Course course = courseService.findCourseById(id);
-        course.setCondition(conditionDao.getOne(3L));
+        course.setCondition(Condition.COMPLETED);
         courseService.save(course);
         return "redirect:/assigned_courses";
     }

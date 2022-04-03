@@ -1,8 +1,8 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.dao.RoleDao;
-import org.example.finalProjectSpring.dao.StatusDao;
-import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.model.Role;
+import org.example.finalProjectSpring.model.Status;
+import org.example.finalProjectSpring.database.entity.User;
 import org.example.finalProjectSpring.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -34,12 +33,6 @@ public class AdminControllerTest {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @MockBean
-    private RoleDao roleDao;
-
-    @Autowired
-    private StatusDao statusDao;
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -48,25 +41,25 @@ public class AdminControllerTest {
     public void studentsListTest() throws Exception {
         User user1 = new User();
 
-        user1.setId(1L);
+        user1.setId("1");
         user1.setFullName("Test User1");
         user1.setUsername("TestUser1");
         user1.setEmail("test.user1@gmail.com");
         user1.setPassword(bCryptPasswordEncoder.encode("testUser1"));
-        user1.setRole(roleDao.getOne(1L));
-        user1.setStatus(statusDao.getOne(1L));
+        user1.setRole(Role.ROLE_STUDENT);
+        user1.setStatus(Status.UNLOCK);
 
         User user2 = new User();
 
-        user2.setId(2L);
+        user2.setId("2");
         user2.setFullName("Test User2");
         user2.setUsername("TestUser2");
         user2.setEmail("test.user2@gmail.com");
         user2.setPassword(bCryptPasswordEncoder.encode("testUser2"));
-        user2.setRole(roleDao.getOne(1L));
-        user2.setStatus(statusDao.getOne(1L));
+        user2.setRole(Role.ROLE_STUDENT);
+        user2.setStatus(Status.UNLOCK);
 
-        when(userService.findAllByRole(roleDao.getOne(1L))).thenReturn(Arrays.asList(user1, user2));
+        when(userService.findAllByRole(Role.ROLE_STUDENT)).thenReturn(Arrays.asList(user1, user2));
 
         mockMvc.perform(get("/students_list"))
                 .andExpect(status().isOk())
@@ -90,7 +83,7 @@ public class AdminControllerTest {
                         )
                 )));
 
-        verify(userService, times(1)).findAllByRole(roleDao.getOne(1L));
+        verify(userService, times(1)).findAllByRole(Role.ROLE_STUDENT);
         verifyNoMoreInteractions(userService);
     }
 

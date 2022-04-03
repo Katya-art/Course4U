@@ -1,16 +1,11 @@
 package org.example.finalProjectSpring.service;
 
-import org.example.finalProjectSpring.model.Course;
-import org.example.finalProjectSpring.model.Mark;
-import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.database.entity.Course;
+import org.example.finalProjectSpring.database.entity.User;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
- * Service class for {@link org.example.finalProjectSpring.model.Course}
+ * Service class for {@link Course}
  *
  * @author Kateryna Kravchenko
  * @version 1.0
@@ -20,9 +15,9 @@ public interface CourseService {
 
     void save(Course course);
 
-    void deleteCourseById(Long id);
+    void deleteCourseById(String id);
 
-    Course findCourseById(Long id);
+    Course findCourseById(String id);
 
     Page<Course> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 

@@ -1,17 +1,15 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.dao.RoleDao;
-import org.example.finalProjectSpring.dao.ConditionDao;
-import org.example.finalProjectSpring.dao.StatusDao;
-import org.example.finalProjectSpring.model.Course;
-import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.database.entity.Course;
+import org.example.finalProjectSpring.model.Role;
+import org.example.finalProjectSpring.model.Status;
+import org.example.finalProjectSpring.database.entity.User;
 import org.example.finalProjectSpring.service.CourseService;
 import org.example.finalProjectSpring.service.UserService;
 import org.example.finalProjectSpring.validator.CourseValidator;
 import org.example.finalProjectSpring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0
  */
 
-@Controller
+@RestController
 public class AdminController {
 
     @Autowired
@@ -37,15 +35,6 @@ public class AdminController {
 
     @Autowired
     private CourseValidator courseValidator;
-
-    @Autowired
-    private RoleDao roleDao;
-
-    @Autowired
-    private ConditionDao conditionDao;
-
-    @Autowired
-    private StatusDao statusDao;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -62,16 +51,22 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "add_teacher";
         }
-        teacherForm.setPassword(bCryptPasswordEncoder.encode(teacherForm.getPassword()));
-        teacherForm.setRole(roleDao.getOne(3L));
-        userService.save(teacherForm);
+        User user = User.builder()
+                .fullName(teacherForm.getFullName())
+                .username(teacherForm.getUsername())
+                .email(teacherForm.getEmail())
+                .password(bCryptPasswordEncoder.encode(teacherForm.getPassword()))
+                .role(Role.ROLE_TEACHER)
+                .status(Status.UNLOCK)
+                .build();
+        userService.save(user);
         return "redirect:/welcome";
     }
 
     @RequestMapping(value = "/add_course", method = RequestMethod.GET)
     public String addCourse(Model model) {
         model.addAttribute("courseForm", new Course());
-        model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
+        model.addAttribute("teachers", userService.findAllByRole(Role.ROLE_TEACHER));
         return "add_course";
     }
 
@@ -80,18 +75,22 @@ public class AdminController {
         courseValidator.validate(courseForm, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("courseForm", courseForm);
-            model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
+            model.addAttribute("teachers", userService.findAllByRole(Role.ROLE_TEACHER));
             return "add_course";
         }
-        courseForm.setTeacher(userService.findUserByFullName(courseForm.getTeacherName()));
-        courseForm.setCondition(conditionDao.getOne(1L));
-        courseForm.setNumberOfStudents(0);
-        courseService.save(courseForm);
+        Course course = Course.builder()
+                .name(courseForm.getName())
+                .theme(courseForm.getTheme())
+                .duration(courseForm.getDuration())
+                .numberOfStudents(0)
+                .teacher(userService.findUserByFullName(courseForm.getTeacherName()))
+                .build();
+        courseService.save(course);
         return "redirect:/welcome";
     }
 
     @RequestMapping(value ="/delete_course/{id}", method = RequestMethod.GET)
-    public String deleteCourse(@PathVariable("id") Long id, @RequestParam("page") int pageNo,
+    public String deleteCourse(@PathVariable("id") String id, @RequestParam("page") int pageNo,
                                @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir,
                                @RequestParam("teacherId") Long teacherId, @RequestParam("themeName") String themeName) {
         courseService.deleteCourseById(id);
@@ -100,22 +99,22 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.GET)
-    public String editCourse(@PathVariable("id")Long id, @ModelAttribute("courseForm") Course courseForm, Model model) {
+    public String editCourse(@PathVariable("id") String id, @ModelAttribute("courseForm") Course courseForm, Model model) {
         Course course = courseService.findCourseById(id);
         course.setTeacherName(course.getTeacher().getFullName());
         model.addAttribute("editForm", course);
-        model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
+        model.addAttribute("teachers", userService.findAllByRole(Role.ROLE_TEACHER));
         return "edit_course";
     }
 
     @RequestMapping(value = "/edit_course/{id}", method = RequestMethod.POST)
-    public String editCourse(@PathVariable("id")Long id, @ModelAttribute("courseForm") Course courseForm,
+    public String editCourse(@PathVariable("id") String id, @ModelAttribute("courseForm") Course courseForm,
                              @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField,
                              @RequestParam("sortDir") String sortDir, @RequestParam("teacherId") Long teacherId,
                              @RequestParam("themeName") String themeName, BindingResult bindingResult, Model model) {
         courseValidator.validate(courseForm, bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("teachers", userService.findAllByRole(roleDao.getOne(3L)));
+            model.addAttribute("teachers", userService.findAllByRole(Role.ROLE_TEACHER));
             return "add_course";
         }
         Course course = courseService.findCourseById(id);
@@ -130,22 +129,22 @@ public class AdminController {
 
     @RequestMapping(value = "/students_list", method = RequestMethod.GET)
     public String studentsList(Model model) {
-        model.addAttribute("studentsList", userService.findAllByRole(roleDao.getOne(1L)));
+        model.addAttribute("studentsList", userService.findAllByRole(Role.ROLE_STUDENT));
         return "students_list";
     }
 
     @RequestMapping(value ="/block_student/{id}", method = RequestMethod.GET)
-    public String blockStudent(@PathVariable("id") Long id) {
+    public String blockStudent(@PathVariable("id") String id) {
         User student = userService.findUserById(id);
-        student.setStatus(statusDao.getOne(2L));
+        student.setStatus(Status.BLOCKED);
         userService.save(student);
         return "redirect:/students_list";
     }
 
     @RequestMapping(value ="/unlock_student/{id}", method = RequestMethod.GET)
-    public String unlockStudent(@PathVariable("id") Long id) {
+    public String unlockStudent(@PathVariable("id") String id) {
         User student = userService.findUserById(id);
-        student.setStatus(statusDao.getOne(1L));
+        student.setStatus(Status.UNLOCK);
         userService.save(student);
         return "redirect:/students_list";
     }

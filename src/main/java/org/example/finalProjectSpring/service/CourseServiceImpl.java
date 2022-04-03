@@ -1,8 +1,8 @@
 package org.example.finalProjectSpring.service;
 
-import org.example.finalProjectSpring.dao.CourseDao;
-import org.example.finalProjectSpring.model.Course;
-import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.database.repository.CourseRepository;
+import org.example.finalProjectSpring.database.entity.Course;
+import org.example.finalProjectSpring.database.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,21 +21,21 @@ import org.springframework.stereotype.Service;
 public class CourseServiceImpl implements CourseService {
 
     @Autowired
-    private CourseDao courseDao;
+    private CourseRepository courseRepository;
 
     @Override
     public void save(Course course) {
-        courseDao.save(course);
+        courseRepository.save(course);
     }
 
     @Override
-    public void deleteCourseById(Long id) {
-        courseDao.deleteById(id);
+    public void deleteCourseById(String id) {
+        courseRepository.deleteById(id);
     }
 
     @Override
-    public Course findCourseById(Long id) {
-        return courseDao.findCourseById(id);
+    public Course findCourseById(String id) {
+        return courseRepository.findCourseById(id);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class CourseServiceImpl implements CourseService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        return this.courseDao.findAll(pageable);
+        return this.courseRepository.findAll(pageable);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CourseServiceImpl implements CourseService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        return this.courseDao.findAllByTeacher(teacher, pageable);
+        return this.courseRepository.findAllByTeacher(teacher, pageable);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class CourseServiceImpl implements CourseService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        return this.courseDao.findAllByTheme(theme, pageable);
+        return this.courseRepository.findAllByTheme(theme, pageable);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CourseServiceImpl implements CourseService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        return this.courseDao.findAllByTeacherAndTheme(teacher, theme, pageable);
+        return this.courseRepository.findAllByTeacherAndTheme(teacher, theme, pageable);
     }
 
 }

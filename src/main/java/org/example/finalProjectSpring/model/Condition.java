@@ -1,7 +1,6 @@
 package org.example.finalProjectSpring.model;
 
-import javax.persistence.*;
-import java.util.Set;
+import org.example.finalProjectSpring.database.entity.Course;
 
 /**
  * Simple JavaBean object that represents {@link Course}'s condition.
@@ -10,41 +9,8 @@ import java.util.Set;
  * @version 1.0
  */
 
-@Entity
-@Table(name = "conditions")
-public class Condition {
+public enum Condition {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    NOT_STARTED, IN_PROGRESS, COMPLETED
 
-    @Column(name = "name")
-    private String name;
-
-    @OneToMany(mappedBy = "condition")
-    private Set<Course> courses;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
-    }
 }

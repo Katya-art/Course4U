@@ -1,9 +1,9 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.dao.RoleDao;
-import org.example.finalProjectSpring.dao.StatusDao;
-import org.example.finalProjectSpring.model.Course;
-import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.database.entity.Course;
+import org.example.finalProjectSpring.model.Role;
+import org.example.finalProjectSpring.model.Status;
+import org.example.finalProjectSpring.database.entity.User;
 import org.example.finalProjectSpring.service.CourseService;
 import org.example.finalProjectSpring.service.SecurityService;
 import org.example.finalProjectSpring.service.UserService;
@@ -19,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -43,12 +42,6 @@ public class MainController {
     private CourseService courseService;
 
     @Autowired
-    private RoleDao roleDao;
-
-    @Autowired
-    private StatusDao statusDao;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
@@ -66,10 +59,15 @@ public class MainController {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        userForm.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
-        userForm.setRole(roleDao.getOne(1L));
-        userForm.setStatus(statusDao.getOne(1L));
-        userService.save(userForm);
+        User user = User.builder()
+                .fullName(userForm.getFullName())
+                .username(userForm.getUsername())
+                .email(userForm.getEmail())
+                .password(bCryptPasswordEncoder.encode(userForm.getPassword()))
+                .role(Role.ROLE_STUDENT)
+                .status(Status.UNLOCK)
+                .build();
+        userService.save(user);
         securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
         return "redirect:/welcome";
     }
@@ -88,7 +86,7 @@ public class MainController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
-        return findPaginated(1, "name", "asc", 0L, "any", model);
+        return findPaginated(1, "name", "asc", "", "any", model);
     }
 
     @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
@@ -103,25 +101,25 @@ public class MainController {
 
     @RequestMapping(value = "/page/{pageNo}", method = RequestMethod.GET)
     public String findPaginated(@PathVariable("pageNo") int pageNo, @RequestParam("sortField") String sortField,
-                                @RequestParam("sortDir") String sortDir, @RequestParam("teacherId") Long teacherId,
+                                @RequestParam("sortDir") String sortDir, @RequestParam("teacherId") String teacherId,
                                 @RequestParam("themeName") String themeName, Model model) {
         int pageSize = 10;
         Page<Course> page = null;
-        if (teacherId != 0 && themeName.replaceAll(" ", "").equals("any")) {
+        if (teacherId.isEmpty() && themeName.replaceAll(" ", "").equals("any")) {
             User teacher = userService.findUserById(teacherId);
             page = courseService.findPaginatedByTeacher(pageNo, pageSize, sortField, sortDir, teacher);
         }
 
-        if (!themeName.replaceAll(" ", "").equals("any") && teacherId == 0) {
+        if (!themeName.replaceAll(" ", "").equals("any") && teacherId.isEmpty()) {
             page = courseService.findPaginatedByTheme(pageNo, pageSize, sortField, sortDir, themeName);
         }
 
-        if (teacherId != 0 && !themeName.replaceAll(" ", "").equals("any")) {
+        if (teacherId.isEmpty() && !themeName.replaceAll(" ", "").equals("any")) {
             User teacher = userService.findUserById(teacherId);
             page = courseService.findPaginatedByTeacherAndTheme(pageNo, pageSize, sortField, sortDir,
                     teacher, themeName);
         }
-        if (teacherId == 0 && themeName.replaceAll(" ", "").equals("any")) {
+        if (teacherId.isEmpty() && themeName.replaceAll(" ", "").equals("any")) {
             page = courseService.findPaginated(pageNo, pageSize, sortField, sortDir);
         }
 

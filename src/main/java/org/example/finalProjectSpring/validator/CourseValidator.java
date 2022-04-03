@@ -1,13 +1,13 @@
 package org.example.finalProjectSpring.validator;
 
-import org.example.finalProjectSpring.model.Course;
+import org.example.finalProjectSpring.database.entity.Course;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 /**
- * Validator for {@link org.example.finalProjectSpring.model.Course} class,
+ * Validator for {@link Course} class,
  * implements {@link Validator} interface.
  *
  * @author Kateryna Kravchenko

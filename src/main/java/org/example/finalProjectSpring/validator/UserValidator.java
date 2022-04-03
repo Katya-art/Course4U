@@ -1,6 +1,6 @@
 package org.example.finalProjectSpring.validator;
 
-import org.example.finalProjectSpring.model.User;
+import org.example.finalProjectSpring.database.entity.User;
 import org.example.finalProjectSpring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 /**
- * Validator for {@link org.example.finalProjectSpring.model.User} class,
+ * Validator for {@link User} class,
  * implements {@link Validator} interface.
  *
  * @author Kateryna Kravchenko
