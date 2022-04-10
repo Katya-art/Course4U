@@ -23,9 +23,9 @@
 <jsp:include page="elements/navbar.jsp"/>
 <div class="container">
     <h2 style="text-align: center">${user.username}</h2>
-    <h4 style="text-align: center">${user.role.name.replace("ROLE_", "")}</h4>
+    <h4 style="text-align: center">${user.role.name().replace("ROLE_", "")}</h4>
     <sec:authorize access="hasRole('STUDENT')">
-        <c:if test="${user.status.id == 2}">
+        <c:if test="${user.status.name() eq 'BLOCK'}">
             <h5 style="text-align: center; color: #ac2925"><spring:message code="yourAccountWasBlocked"/></h5>
         </c:if>
     </sec:authorize>

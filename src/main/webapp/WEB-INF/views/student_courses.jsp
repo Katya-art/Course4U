@@ -30,22 +30,22 @@
         <tr>
             <th scope="col"><spring:message code="courseName"/></th>
             <th scope="col"><spring:message code="teacherName"/></th>
-            <th scope="col"><spring:message code="theme"/></th>
+            <th scope="col"><spring:message code="courseTheme"/></th>
             <th scope="col"><spring:message code="duration"/></th>
-            <c:if test="${condition.equals('completed')}">
+            <c:if test="${condition eq 'COMPLETED'}">
                 <th scope="col"><spring:message code="mark"/></th>
             </c:if>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${courses}" var="course">
+        <c:forEach items="${courseResponses}" var="courseResponse">
             <tr>
-                <td>${course.name}</td>
-                <td>${course.teacher.fullName}</td>
-                <td>${course.theme}</td>
-                <td>${course.duration}</td>
-                <c:if test="${condition.equals('completed')}">
-                    <td>${course.studentsMarks.get(user).name}</td>
+                <td>${courseResponse.course.name}</td>
+                <td>${courseResponse.course.teacher.fullName}</td>
+                <td>${courseResponse.course.theme}</td>
+                <td>${courseResponse.course.duration}</td>
+                <c:if test="${condition eq 'COMPLETED'}">
+                    <td>${courseResponse.grade}</td>
                 </c:if>
             </tr>
         </c:forEach>

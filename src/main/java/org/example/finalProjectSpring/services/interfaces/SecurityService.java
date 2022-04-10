@@ -1,4 +1,4 @@
-package org.example.finalProjectSpring.service;
+package org.example.finalProjectSpring.services.interfaces;
 
 /**
  * Service for Security.

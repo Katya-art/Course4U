@@ -33,16 +33,16 @@
         <c:forEach items="${courses}" var="course">
             <tr>
                 <td>${course.name}</td>
-                <td>${course.studentsMarks.size()}</td>
+                <td>${course.numberOfStudents}</td>
                 <c:choose>
-                    <c:when test="${course.condition.id == 1}">
-                        <td><a href="${pageContext.request.contextPath}/start_course/${course.id}"
+                    <c:when test="${course.condition eq 'NOT_STARTED'}">
+                        <td><a href="${pageContext.request.contextPath}/change_course_condition/${course.id}?condition=IN_PROGRESS"
                                class="btn btn-primary mt-4"><spring:message code="startCourse"/></a></td>
                     </c:when>
-                    <c:when test="${course.condition.id == 2}">
+                    <c:when test="${course.condition eq 'IN_PROGRESS'}">
                         <td><a href="${pageContext.request.contextPath}/grade_journal/${course.id}"
                                class="btn btn-primary mt-4"><spring:message code="gradeJournal"/></a></td>
-                        <td><a href="${pageContext.request.contextPath}/finish_course/${course.id}"
+                        <td><a href="${pageContext.request.contextPath}/change_course_condition/${course.id}?condition=COMPLETED"
                                class="btn btn-primary mt-4"><spring:message code="finishCourse"/></a></td>
                     </c:when>
                 </c:choose>

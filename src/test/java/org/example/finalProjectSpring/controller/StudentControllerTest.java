@@ -1,9 +1,9 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.model.Condition;
+import org.example.finalProjectSpring.model.enams.Condition;
 import org.example.finalProjectSpring.database.entity.Course;
 import org.example.finalProjectSpring.database.entity.User;
-import org.example.finalProjectSpring.service.UserService;
+import org.example.finalProjectSpring.services.interfaces.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class StudentControllerTest {
         course1.setTheme("Test");
         course1.setDuration(4L);
         course1.setNumberOfStudents(1);
-        course1.setTeacher(userService.findByUsername("ElaReader"));
+        course1.setTeacher(userService.findUserByUsername("ElaReader"));
         course1.setCondition(Condition.NOT_STARTED);
 
         Course course2 = new Course();
@@ -64,7 +64,7 @@ public class StudentControllerTest {
         course2.setTheme("Test");
         course2.setDuration(5L);
         course2.setNumberOfStudents(1);
-        course2.setTeacher(userService.findByUsername("ElaReader"));
+        course2.setTeacher(userService.findUserByUsername("ElaReader"));
         course2.setCondition(Condition.IN_PROGRESS);
 
         Course course3 = new Course();
@@ -74,7 +74,7 @@ public class StudentControllerTest {
         course3.setTheme("Test");
         course3.setDuration(2L);
         course3.setNumberOfStudents(1);
-        course3.setTeacher(userService.findByUsername("ElaReader"));
+        course3.setTeacher(userService.findUserByUsername("ElaReader"));
         course3.setCondition(Condition.COMPLETED);
 
         List<Course> courses = new ArrayList<>();
@@ -85,7 +85,7 @@ public class StudentControllerTest {
         User student = new User();
         //student.setEnrolledCourses(courses);
 
-        when(userService.findByUsername("AyvaBowers")).thenReturn(student);
+        when(userService.findUserByUsername("AyvaBowers")).thenReturn(student);
 
         mockMvc.perform(get("/my_courses/not_started"))
                 .andExpect(status().isOk())
@@ -95,8 +95,8 @@ public class StudentControllerTest {
                 .andExpect(model().attribute("courses", hasItem(
                         allOf(
                                 hasProperty("id", is(1L)),
-                                hasProperty("name", is("Test Course1")),
-                                hasProperty("theme", is("Test")),
+                                hasProperty("courseName", is("Test Course1")),
+                                hasProperty("courseTheme", is("Test")),
                                 hasProperty("duration", is(4L))
                         )
                 )));
@@ -109,8 +109,8 @@ public class StudentControllerTest {
                 .andExpect(model().attribute("courses", hasItem(
                         allOf(
                                 hasProperty("id", is(2L)),
-                                hasProperty("name", is("Test Course2")),
-                                hasProperty("theme", is("Test")),
+                                hasProperty("courseName", is("Test Course2")),
+                                hasProperty("courseTheme", is("Test")),
                                 hasProperty("duration", is(5L))
                         )
                 )));
@@ -123,14 +123,14 @@ public class StudentControllerTest {
                 .andExpect(model().attribute("courses", hasItem(
                         allOf(
                                 hasProperty("id", is(3L)),
-                                hasProperty("name", is("Test Course3")),
-                                hasProperty("theme", is("Test")),
+                                hasProperty("courseName", is("Test Course3")),
+                                hasProperty("courseTheme", is("Test")),
                                 hasProperty("duration", is(2L))
                         )
                 )));
 
-        verify(userService, times(3)).findByUsername("ElaReader");
-        verify(userService, times(3)).findByUsername("AyvaBowers");
+        verify(userService, times(3)).findUserByUsername("ElaReader");
+        verify(userService, times(3)).findUserByUsername("AyvaBowers");
         verifyNoMoreInteractions(userService);
     }
 }

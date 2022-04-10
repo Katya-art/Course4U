@@ -23,7 +23,7 @@
 <body>
 <jsp:include page="elements/navbar.jsp"/>
 <div class="container">
-    <form method="POST" action="${contextPath}/save_journal/${course.id}">
+    <form method="POST" action="${contextPath}/save_journal/${courseId}">
         <table class="table">
             <thead class="thead-dark">
             <tr>
@@ -32,20 +32,20 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${course.studentsMarks}" var="student">
+            <c:forEach items="${userCourseGrades}" var="userCourseGrade">
                 <tr>
-                    <input type="hidden" name="students" value="${student.key.id}" />
-                    <td>${student.key.fullName}</td>
+                    <input type="hidden" name="students" value="${userCourseGrade.student.id}" />
+                    <td>${userCourseGrade.student.fullName}</td>
                     <td>
-                        <select id="marks" name="marks">
-                            <c:forEach items="${marks}" var="mark">
+                        <select id="grades" name="grades">
+                            <c:forEach items="${grades}" var="grade">
                                 <c:choose>
-                                    <c:when test="${mark.id == student.value.id}">
-                                        <option value="${mark.id}"
-                                                selected="selected">${mark.name}</option>
+                                    <c:when test="${grade eq userCourseGrade.grade}">
+                                        <option value="${grade}"
+                                                selected="selected">${grade}</option>
                                     </c:when>
                                     <c:otherwise>
-                                        <option value="${mark.id}">${mark.name}</option>
+                                        <option value="${grade}">${grade}</option>
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>

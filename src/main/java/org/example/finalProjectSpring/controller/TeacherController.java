@@ -1,17 +1,25 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.model.Condition;
 import org.example.finalProjectSpring.database.entity.Course;
-import org.example.finalProjectSpring.model.Grade;
 import org.example.finalProjectSpring.database.entity.User;
-import org.example.finalProjectSpring.service.CourseService;
-import org.example.finalProjectSpring.service.UserService;
+import org.example.finalProjectSpring.database.entity.UserCourseGrade;
+import org.example.finalProjectSpring.model.enams.Condition;
+import org.example.finalProjectSpring.model.enams.Grade;
+import org.example.finalProjectSpring.model.responses.UserCourseGradeResponse;
+import org.example.finalProjectSpring.services.interfaces.CourseService;
+import org.example.finalProjectSpring.services.interfaces.UserCourseGradeService;
+import org.example.finalProjectSpring.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * Controller for teacher's pages.
@@ -29,6 +37,9 @@ public class TeacherController {
     @Autowired
     CourseService courseService;
 
+    @Autowired
+    UserCourseGradeService userCourseGradeService;
+
     @RequestMapping(value = "/assigned_courses", method = RequestMethod.GET)
     public String teacherCourses(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -38,46 +49,32 @@ public class TeacherController {
         } else {
             username = principal.toString();
         }
-        User user = userService.findByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("courses", user.getAssignedCourses());
         return "teacher_courses";
     }
 
-    @RequestMapping(value ="/start_course/{id}", method = RequestMethod.GET)
-    public String startCourse(@PathVariable("id") String id) {
-        Course course = courseService.findCourseById(id);
-        course.setCondition(Condition.IN_PROGRESS);
-        courseService.save(course);
+    @RequestMapping(value ="/change_course_condition/{id}", method = RequestMethod.GET)
+    public String startCourse(@PathVariable("id") String id, @RequestParam(value = "condition") Condition condition) {
+        courseService.changeCourseCondition(id, condition);
         return "redirect:/assigned_courses";
     }
 
     @RequestMapping(value ="/grade_journal/{id}", method = RequestMethod.GET)
     public String gradeJournal(@PathVariable("id") String id, Model model) {
-        Course course = courseService.findCourseById(id);
-        model.addAttribute("course", course);
-        model.addAttribute("marks", Grade.values());
+        List<UserCourseGradeResponse> userCourseGrades = userCourseGradeService.findAllByCourseId(id);
+        model.addAttribute("courseId", id);
+        model.addAttribute("userCourseGrades", userCourseGrades);
+        model.addAttribute("grades", Grade.values());
         return "grade_journal";
     }
 
     @RequestMapping(value ="/save_journal/{id}", method = RequestMethod.POST)
     public String saveJournal(@PathVariable("id") String id,
-                              @RequestParam(value = "marks", required = false) Long[] marks,
-                              @RequestParam(value = "students", required = false) Long[] students) {
-        Course course = courseService.findCourseById(id);
-//        Map<User, Mark> userMarkMap = new HashMap<>();
-//        for (int i = 0; i < marks.length; i++) {
-//            userMarkMap.put(userService.findUserById(students[i]), markService.findMarkById(marks[i]));
-//        }
-        //course.setStudentsMarks(userMarkMap);
-        courseService.save(course);
+                              @RequestParam(value = "students", required = false) String[] studentsId,
+                              @RequestParam(value = "grades", required = false) Grade[] grades) {
+        userCourseGradeService.updateUserCourseGrades(id, studentsId, grades);
         return "redirect:/assigned_courses";
     }
 
-    @RequestMapping(value ="/finish_course/{id}", method = RequestMethod.GET)
-    public String finishCourse(@PathVariable("id") String id) {
-        Course course = courseService.findCourseById(id);
-        course.setCondition(Condition.COMPLETED);
-        courseService.save(course);
-        return "redirect:/assigned_courses";
-    }
 }

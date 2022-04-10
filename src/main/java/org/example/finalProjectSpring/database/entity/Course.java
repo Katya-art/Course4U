@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.finalProjectSpring.model.Condition;
+import org.example.finalProjectSpring.model.enams.Condition;
 
 import javax.persistence.*;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -41,9 +40,6 @@ public class Course {
     @Column(name = "number_of_students")
     private int numberOfStudents;
 
-    @Transient
-    private String teacherName;
-
     @ManyToOne
     @JoinTable(name = "course_teacher", joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id"))
@@ -65,7 +61,10 @@ public class Course {
 //    private Map<User, Mark> studentsMarks;
 
     public static Course.CourseBuilder builder() {
-        return new Course.CourseBuilder().id(UUID.randomUUID().toString()).condition(Condition.NOT_STARTED);
+        return new Course.CourseBuilder()
+                .id(UUID.randomUUID().toString())
+                .numberOfStudents(0)
+                .condition(Condition.NOT_STARTED);
     }
 
 }

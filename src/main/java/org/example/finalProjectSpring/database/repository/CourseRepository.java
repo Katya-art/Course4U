@@ -6,9 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface CourseRepository extends JpaRepository<Course, String> {
 
-    Course findCourseById(String id);
+    Optional<Course> findCourseById(String id);
 
     Page<Course> findAllByTeacher(User teacher, Pageable pageable);
 

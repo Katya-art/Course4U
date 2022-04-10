@@ -1,9 +1,9 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.model.Role;
-import org.example.finalProjectSpring.model.Status;
+import org.example.finalProjectSpring.model.enams.Role;
+import org.example.finalProjectSpring.model.enams.Status;
 import org.example.finalProjectSpring.database.entity.User;
-import org.example.finalProjectSpring.service.UserService;
+import org.example.finalProjectSpring.services.interfaces.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

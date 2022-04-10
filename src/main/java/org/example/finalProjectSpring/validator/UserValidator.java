@@ -1,7 +1,10 @@
 package org.example.finalProjectSpring.validator;
 
+import lombok.RequiredArgsConstructor;
 import org.example.finalProjectSpring.database.entity.User;
-import org.example.finalProjectSpring.service.UserService;
+import org.example.finalProjectSpring.database.repository.UserRepository;
+import org.example.finalProjectSpring.model.dto.UserDTO;
+import org.example.finalProjectSpring.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -17,10 +20,10 @@ import org.springframework.validation.Validator;
  */
 
 @Component
+@RequiredArgsConstructor
 public class UserValidator implements Validator {
 
-    @Autowired
-    private UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -29,38 +32,38 @@ public class UserValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        User user = (User) o;
+        UserDTO userDTO = (UserDTO) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "fullName", "required");
-        if (user.getFullName().length() < 6 || user.getFullName().length() > 32) {
+        if (userDTO.getFullName().length() < 6 || userDTO.getFullName().length() > 32) {
             errors.rejectValue("fullName", "sizeUserFormFullName");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "required");
-        if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {
+        if (userDTO.getUsername().length() < 6 || userDTO.getUsername().length() > 32) {
             errors.rejectValue("username", "sizeUserFormUsername");
         }
 
-        if (userService.findByUsername(user.getUsername()) != null) {
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             errors.rejectValue("username", "duplicateUserFormUsername");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "required");
-        if (!user.getEmail().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+        if (!userDTO.getEmail().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
             errors.rejectValue("email", "wrongEmail");
         }
 
-        if (userService.findByEmail(user.getEmail()) != null) {
+        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             errors.rejectValue("email", "duplicateUserFormEmail");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "required");
-        if (user.getPassword().length() < 6 || user.getPassword().length() > 32) {
+        if (userDTO.getPassword().length() < 6 || userDTO.getPassword().length() > 32) {
             errors.rejectValue("password", "sizeUserFormPassword");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword", "required");
-        if (!user.getConfirmPassword().equals(user.getPassword())) {
+        if (!userDTO.getConfirmPassword().equals(userDTO.getPassword())) {
             errors.rejectValue("confirmPassword", "differentUserFormPassword");
         }
     }

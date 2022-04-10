@@ -1,8 +1,13 @@
-package org.example.finalProjectSpring.service;
+package org.example.finalProjectSpring.services.interfaces;
 
 import org.example.finalProjectSpring.database.entity.Course;
 import org.example.finalProjectSpring.database.entity.User;
+import org.example.finalProjectSpring.model.dto.CourseDTO;
+import org.example.finalProjectSpring.model.enams.Condition;
+import org.example.finalProjectSpring.model.responses.CourseResponse;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 /**
  * Service class for {@link Course}
@@ -13,11 +18,17 @@ import org.springframework.data.domain.Page;
 
 public interface CourseService {
 
-    void save(Course course);
+    void createCourse(CourseDTO courseDTO);
 
-    void deleteCourseById(String id);
+    void updateCourse(String courseId, CourseDTO courseDTO);
 
-    Course findCourseById(String id);
+    void deleteCourseById(String courseId);
+
+    Course findCourseById(String courseId);
+
+    CourseDTO getCourseDTO(String courseId);
+
+    void changeCourseCondition(String courseId, Condition condition);
 
     Page<Course> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 
@@ -26,4 +37,7 @@ public interface CourseService {
     Page<Course> findPaginatedByTheme(int pageNo, int pageSize, String sortField, String sortDirection, String theme);
 
     Page<Course> findPaginatedByTeacherAndTheme(int pageNo, int pageSize, String sortField, String sortDirection, User teacher, String theme);
+
+    List<CourseResponse> findAllByUsernameAndCondition(String username, String condition);
+
 }

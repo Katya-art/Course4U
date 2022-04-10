@@ -1,9 +1,9 @@
 package org.example.finalProjectSpring.controller;
 
-import org.example.finalProjectSpring.model.Condition;
+import org.example.finalProjectSpring.model.enams.Condition;
 import org.example.finalProjectSpring.database.entity.Course;
 import org.example.finalProjectSpring.database.entity.User;
-import org.example.finalProjectSpring.service.UserService;
+import org.example.finalProjectSpring.services.interfaces.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class TeacherControllerTest {
         course1.setTheme("Test");
         course1.setDuration(4L);
         course1.setNumberOfStudents(0);
-        course1.setTeacher(userService.findByUsername("ElaReader"));
+        course1.setTeacher(userService.findUserByUsername("ElaReader"));
         course1.setCondition(Condition.NOT_STARTED);
 
         Course course2 = new Course();
@@ -53,7 +53,7 @@ public class TeacherControllerTest {
         course2.setTheme("Test");
         course2.setDuration(5L);
         course2.setNumberOfStudents(0);
-        course2.setTeacher(userService.findByUsername("ElaReader"));
+        course2.setTeacher(userService.findUserByUsername("ElaReader"));
         course2.setCondition(Condition.NOT_STARTED);
 
         List<Course> courses = new ArrayList<>();
@@ -63,7 +63,7 @@ public class TeacherControllerTest {
         User teacher = new User();
         teacher.setAssignedCourses(courses);
 
-        when(userService.findByUsername("ElaReader")).thenReturn(teacher);
+        when(userService.findUserByUsername("ElaReader")).thenReturn(teacher);
 
         mockMvc.perform(get("/assigned_courses"))
                 .andExpect(status().isOk())
@@ -73,21 +73,21 @@ public class TeacherControllerTest {
                 .andExpect(model().attribute("courses", hasItem(
                         allOf(
                                 hasProperty("id", is(1L)),
-                                hasProperty("name", is("Test Course1")),
-                                hasProperty("theme", is("Test")),
+                                hasProperty("courseName", is("Test Course1")),
+                                hasProperty("courseTheme", is("Test")),
                                 hasProperty("duration", is(4L))
                         )
                 )))
                 .andExpect(model().attribute("courses", hasItem(
                         allOf(
                                 hasProperty("id", is(2L)),
-                                hasProperty("name", is("Test Course2")),
-                                hasProperty("theme", is("Test")),
+                                hasProperty("courseName", is("Test Course2")),
+                                hasProperty("courseTheme", is("Test")),
                                 hasProperty("duration", is(5L))
                         )
                 )));
 
-        verify(userService, times(3)).findByUsername("ElaReader");
+        verify(userService, times(3)).findUserByUsername("ElaReader");
         verifyNoMoreInteractions(userService);
     }
 }

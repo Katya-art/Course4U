@@ -27,12 +27,12 @@
             <tr>
                 <td>${student.fullName}</td>
                 <c:choose>
-                    <c:when test="${student.status.id == 1}">
-                        <td><a href="${pageContext.request.contextPath}/block_student/${student.id}"
+                    <c:when test="${student.status eq 'UNLOCK'}">
+                        <td><a href="${pageContext.request.contextPath}/change_student_status/${student.id}?status=BLOCKED"
                                class="btn btn-info mt-4"><spring:message code="blockStudent"/></a></td>
                     </c:when>
                     <c:otherwise>
-                        <td><a href="${pageContext.request.contextPath}/unlock_student/${student.id}"
+                        <td><a href="${pageContext.request.contextPath}/change_student_status/${student.id}?status=UNLOCK"
                                class="btn btn-info mt-4"><spring:message code="unlockStudent"/></a></td>
                     </c:otherwise>
                 </c:choose>

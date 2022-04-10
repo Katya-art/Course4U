@@ -31,20 +31,20 @@
 
     <form:form method="POST" modelAttribute="courseForm" class="form-signin">
         <h2 class="form-signin-heading"><spring:message code="newCourse"/></h2>
-        <spring:bind path="name">
+        <spring:bind path="courseName">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <spring:message code="courseName" var="name"/>
-                <form:input type="text" path="name" class="form-control" placeholder="${name}"
+                <spring:message code="courseName" var="courseName"/>
+                <form:input type="text" path="courseName" class="form-control" placeholder="${courseName}"
                             autofocus="true"/>
-                <form:errors path="name"/>
+                <form:errors path="courseName"/>
             </div>
         </spring:bind>
 
-        <spring:bind path="theme">
+        <spring:bind path="courseTheme">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <spring:message code="theme" var="theme"/>
-                <form:input type="text" path="theme" class="form-control" placeholder="${theme}"/>
-                <form:errors path="theme"/>
+                <spring:message code="courseTheme" var="courseTheme"/>
+                <form:input type="text" path="courseTheme" class="form-control" placeholder="${courseTheme}"/>
+                <form:errors path="courseTheme"/>
             </div>
         </spring:bind>
 

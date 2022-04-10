@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.finalProjectSpring.model.Grade;
+import org.example.finalProjectSpring.model.enams.Grade;
+import org.example.finalProjectSpring.model.enams.Status;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -21,12 +23,17 @@ public class UserCourseGrade {
     private String id;
 
     @Column(name = "user_id", nullable = false, updatable = false)
-    private String user_id;
+    private String userId;
 
     @Column(name = "course_id", nullable = false, updatable = false)
-    private String course_id;
+    private String courseId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Grade grade;
+
+    public static UserCourseGrade.UserCourseGradeBuilder builder() {
+        return new UserCourseGrade.UserCourseGradeBuilder()
+                .id(UUID.randomUUID().toString());
+    }
 }

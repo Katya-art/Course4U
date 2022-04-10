@@ -1,4 +1,4 @@
-package org.example.finalProjectSpring.model;
+package org.example.finalProjectSpring.model.enams;
 
 import org.example.finalProjectSpring.database.entity.User;
 

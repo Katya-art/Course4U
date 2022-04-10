@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.finalProjectSpring.database.entity.Course;
-import org.example.finalProjectSpring.model.Role;
-import org.example.finalProjectSpring.model.Status;
+import org.example.finalProjectSpring.model.enams.Role;
+import org.example.finalProjectSpring.model.enams.Status;
 
 import javax.persistence.*;
 import java.util.List;
@@ -43,9 +42,6 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Transient
-    private String confirmPassword;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -63,7 +59,9 @@ public class User {
     private Status status;
 
     public static UserBuilder builder() {
-        return new UserBuilder().id(UUID.randomUUID().toString());
+        return new UserBuilder()
+                .id(UUID.randomUUID().toString())
+                .status(Status.UNLOCK);
     }
 
 }

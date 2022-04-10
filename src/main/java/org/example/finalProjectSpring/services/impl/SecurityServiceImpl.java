@@ -1,5 +1,8 @@
-package org.example.finalProjectSpring.service;
+package org.example.finalProjectSpring.services.impl;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.finalProjectSpring.services.interfaces.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +20,13 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  */
 
+@Slf4j
 @Service
+@AllArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public String findLoggedInUsername() {
@@ -49,7 +49,7 @@ public class SecurityServiceImpl implements SecurityService {
         if (authenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            logger.debug(String.format("Successfully %s auto logged in", username));
+            log.debug(String.format("Successfully %s auto logged in", username));
         }
     }
 }

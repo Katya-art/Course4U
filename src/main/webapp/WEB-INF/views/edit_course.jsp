@@ -35,21 +35,21 @@
             <tr>
                 <td><spring:message code="courseName"/></td>
                 <td>
-                    <spring:bind path="name">
+                    <spring:bind path="courseName">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" path="name" class="form-control" autofocus="true"/>
-                            <form:errors path="name"/>
+                            <form:input type="text" path="courseName" class="form-control" autofocus="true"/>
+                            <form:errors path="courseName"/>
                         </div>
                     </spring:bind>
                 </td>
             </tr>
             <tr>
-                <td><spring:message code="theme"/></td>
+                <td><spring:message code="courseTheme"/></td>
                 <td>
-                    <spring:bind path="theme">
+                    <spring:bind path="courseTheme">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" path="theme" class="form-control"/>
-                            <form:errors path="theme"/>
+                            <form:input type="text" path="courseTheme" class="form-control"/>
+                            <form:errors path="courseTheme"/>
                         </div>
                     </spring:bind>
                 </td>
